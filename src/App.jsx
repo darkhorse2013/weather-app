@@ -46,7 +46,7 @@ function App() {
   //event handler for the button
   function onSearchClick() {
     //if no City has been entered, display error message
-    if (cityEntered.trim().length == 0) {
+    if (cityEntered.trim().length === 0) {
       //      showSearchError = "please enter a city";
       setSearchError("Please enter a city!");
     } else {

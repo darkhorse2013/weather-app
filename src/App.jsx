@@ -2,14 +2,18 @@ import { useState } from "react";
 import "./App.css";
 
 //components, will be put into own files later on
-function SearchInput({ searchError, onChangeSearch }) {
+function SearchInput({ searchError, cityEntered, onChangeSearch }) {
   return (
     <>
       <div>Type in a city</div>
       <div>
         <span className="incorrectValue">{searchError}</span>
       </div>
-      <input id="searchCity" onChange={onChangeSearch}></input>
+      <input
+        id="searchCity"
+        value={cityEntered}
+        onChange={onChangeSearch}
+      ></input>
     </>
   );
 }
@@ -52,7 +56,7 @@ function App() {
     } else {
       //get whatever is from state
 
-      console.log("you have entered: " + cityEntered);
+      console.log("you have entered: " + cityEntered.trim());
     }
   }
 
@@ -66,6 +70,7 @@ function App() {
         <div>
           <SearchInput
             searchError={showSearchError}
+            cityEntered={cityEntered}
             onChangeSearch={onSearchChange}
           ></SearchInput>
           <SearchButton onSearchButtonClick={onSearchClick}></SearchButton>

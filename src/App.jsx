@@ -33,8 +33,15 @@ function App() {
   // React state management
   const [cityEntered, setCity] = useState("");
   const [showSearchError, setSearchError] = useState("");
+  //Weather data object will be stored here
+  const [weatherData, setWeatherData] = useState("");
 
   //derived data , not stored in state but calculated each render
+  let fakeData = {
+    city: "London",
+    temperature: 18,
+    condition: "Cloudy",
+  };
 
   //event handler for input box
 
@@ -54,10 +61,23 @@ function App() {
       //      showSearchError = "please enter a city";
       setSearchError("Please enter a city!");
     } else {
-      //get whatever is from state
-
-      console.log("you have entered: " + cityEntered.trim());
+      //display weather details based on details within WeatherData object
+      setWeatherData(fakeData);
     }
+  }
+
+  let weatherBlock;
+
+  if (weatherData) {
+    weatherBlock = (
+      <div>
+        <div>Weather for {weatherData.city}</div>
+        <div>Temperature: {weatherData.temperature}</div>
+        <div>Condition: {weatherData.condition}</div>
+      </div>
+    );
+  } else {
+    weatherBlock = <div>No Weather Data Yet</div>;
   }
 
   return (
@@ -74,6 +94,7 @@ function App() {
             onChangeSearch={onSearchChange}
           ></SearchInput>
           <SearchButton onSearchButtonClick={onSearchClick}></SearchButton>
+          {weatherBlock}
         </div>
       </section>
     </>

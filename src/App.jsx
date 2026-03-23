@@ -34,17 +34,9 @@ function App() {
   const [cityEntered, setCity] = useState("");
   const [showSearchError, setSearchError] = useState("");
   //Weather data object will be stored here
-  const [weatherData, setWeatherData] = useState("");
-
-  //derived data , not stored in state but calculated each render
-  let fakeData = {
-    city: "London",
-    temperature: 18,
-    condition: "Cloudy",
-  };
+  const [weatherData, setWeatherData] = useState(null);
 
   //event handler for input box
-
   function onSearchChange(event) {
     console.log(event.target.value);
 
@@ -55,14 +47,61 @@ function App() {
   }
 
   //event handler for the button
-  function onSearchClick() {
+  //async - this function will deal with something that takes time
+  //does not block other api calls on page, when it finishes, come back here and continue
+  async function onSearchClick() {
     //if no City has been entered, display error message
     if (cityEntered.trim().length === 0) {
       //      showSearchError = "please enter a city";
       setSearchError("Please enter a city!");
-    } else {
-      //display weather details based on details within WeatherData object
-      setWeatherData(fakeData);
+      //break out of function
+      return;
+    }
+
+    try {
+      //go call the API and wait (await) until the response comes back
+      // await = pause here until this finishes, then continue
+      //get coorindates
+      const geoResponse = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${cityEntered}&count=1&language=en&format=json`,
+      );
+
+      //turn the API response into JavaScript data and wait for that too
+      const geoData = await geoResponse.json();
+      console.log("geocoding data", geoData);
+
+      if (!geoData.results || geoData.results.length === 0) {
+        setSearchError("City not found!");
+        setWeatherData(null);
+        return;
+      }
+
+      const latitude = geoData.results[0].latitude;
+      const longitude = geoData.results[0].longitude;
+      const cityName = geoData.results[0].name;
+
+      //go call the API and wait (await) until the response comes back
+      const weatherResponse = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`,
+      );
+
+      const weatherApiData = await weatherResponse.json();
+      console.log("weather data", weatherApiData);
+
+      const finalWeatherData = {
+        city: cityName,
+        temperature: weatherApiData.current_weather.temperature,
+        condition: weatherApiData.current_weather.weathercode,
+      };
+
+      //save into state, trigger a re-render
+      setWeatherData(finalWeatherData);
+
+      //if api call fails
+    } catch (error) {
+      console.log(error);
+      setSearchError("Something went wrong. Please try again.");
+      setWeatherData(null);
     }
   }
 

@@ -101,8 +101,16 @@ function App() {
       const cityName = geoData.results[0].name;
 
       //go call the API and wait (await) until the response comes back
+
+      /* single day
       const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`,
+      );
+
+      */
+
+      const weatherResponse = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`,
       );
 
       const weatherApiData = await weatherResponse.json();

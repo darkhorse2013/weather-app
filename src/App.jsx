@@ -116,6 +116,9 @@ function App() {
       const weatherApiData = await weatherResponse.json();
       console.log("weather data", weatherApiData);
 
+      //push each day into this array
+      const forecastDays = [];
+
       const weatherCondition = returnCondition(
         weatherApiData.current_weather.weathercode,
       );

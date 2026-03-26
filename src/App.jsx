@@ -19,11 +19,23 @@ function SearchInput({ searchError, cityEntered, onChangeSearch }) {
 }
 
 //search button component, will be put into it's own file later on
-function SearchButton({ onSearchButtonClick }) {
+function SearchButton({ onSearchButtonClick, isLoading }) {
+  let buttonText;
+
+  if (isLoading === true) {
+    buttonText = "Loading...";
+  } else {
+    buttonText = "Search";
+  }
+
   return (
     <>
-      <button id="searchButton" onClick={onSearchButtonClick}>
-        Search
+      <button
+        id="searchButton"
+        onClick={onSearchButtonClick}
+        disabled={isLoading}
+      >
+        {buttonText}
       </button>
     </>
   );
@@ -52,6 +64,8 @@ function App() {
   //async - this function will deal with something that takes time
   //does not block other api calls on page, when it finishes, come back here and continue
   async function onSearchClick() {
+    //clear old errors
+    setSearchError("");
     //if no City has been entered, display error message
     if (cityEntered.trim().length === 0) {
       //      showSearchError = "please enter a city";
@@ -94,9 +108,7 @@ function App() {
       const weatherApiData = await weatherResponse.json();
       console.log("weather data", weatherApiData);
 
-      let weatherCondition;
-
-      weatherCondition = returnCondition(
+      const weatherCondition = returnCondition(
         weatherApiData.current_weather.weathercode,
       );
 
@@ -211,7 +223,10 @@ function App() {
             cityEntered={cityEntered}
             onChangeSearch={onSearchChange}
           ></SearchInput>
-          <SearchButton onSearchButtonClick={onSearchClick}></SearchButton>
+          <SearchButton
+            onSearchButtonClick={onSearchClick}
+            isLoading={isLoading}
+          ></SearchButton>
           {weatherBlock}
         </div>
       </section>

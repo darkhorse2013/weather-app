@@ -119,6 +119,7 @@ function App() {
       let forecastDays = [];
       let dailyWeather;
       let checkCondition;
+      let weatherSymbol;
 
       //cycle through weather api data, let's stick daily into an array
       for (let i = 0; i < weatherApiData.daily.time.length; i++) {
@@ -126,12 +127,17 @@ function App() {
 
         checkCondition = returnCondition(weatherApiData.daily.weathercode[i]);
 
+        //get Weather icon
+
+        weatherSymbol = getWeatherIcon(weatherApiData.daily.weathercode[i]);
+
         dailyWeather = {
           city: cityName,
           date: weatherApiData.daily.time[i],
           temperature_max: weatherApiData.daily.temperature_2m_max[i],
           temperature_min: weatherApiData.daily.temperature_2m_min[i],
           condition: checkCondition,
+          weatherIcon: weatherSymbol,
         };
 
         //once constructed, push into array
@@ -219,6 +225,62 @@ function App() {
     return "Unknown weather";
   }
 
+  function getWeatherIcon(weatherCode) {
+    // Clear / clouds
+    if (weatherCode === 0) return "☀️"; // Clear sky
+    if (weatherCode === 1) return "🌤️"; // Mainly clear
+    if (weatherCode === 2) return "⛅"; // Partly cloudy
+    if (weatherCode === 3) return "☁️"; // Overcast
+
+    // Fog
+    if (weatherCode === 45) return "🌫️"; // Fog
+    if (weatherCode === 48) return "🌫️"; // Rime fog
+
+    // Drizzle
+    if (weatherCode === 51) return "🌦️"; // Light drizzle
+    if (weatherCode === 53) return "🌦️"; // Moderate drizzle
+    if (weatherCode === 55) return "🌧️"; // Dense drizzle
+
+    // Freezing drizzle
+    if (weatherCode === 56) return "🌧️❄️";
+    if (weatherCode === 57) return "🌧️❄️";
+
+    // Rain
+    if (weatherCode === 61) return "🌧️";
+    if (weatherCode === 63) return "🌧️";
+    if (weatherCode === 65) return "🌧️";
+
+    // Freezing rain
+    if (weatherCode === 66) return "🌧️❄️";
+    if (weatherCode === 67) return "🌧️❄️";
+
+    // Snow
+    if (weatherCode === 71) return "❄️";
+    if (weatherCode === 73) return "❄️";
+    if (weatherCode === 75) return "❄️";
+
+    if (weatherCode === 77) return "🌨️"; // Snow grains
+
+    // Rain showers
+    if (weatherCode === 80) return "🌦️";
+    if (weatherCode === 81) return "🌧️";
+    if (weatherCode === 82) return "🌧️";
+
+    // Snow showers
+    if (weatherCode === 85) return "🌨️";
+    if (weatherCode === 86) return "❄️";
+
+    // Thunderstorm
+    if (weatherCode === 95) return "⛈️";
+
+    if (weatherCode === 96) return "⛈️🧊";
+    if (weatherCode === 99) return "⛈️🧊";
+
+    return "🌤️"; // default
+  }
+
+  /*condition ? valueIfTrue : valueIfFalse */
+
   let weatherBlock;
   if (isLoading) {
     //if is loading state has been triggered
@@ -231,6 +293,10 @@ function App() {
         <div className="weather-grid">
           {weatherData.map((dailyWeather) => (
             <div key={dailyWeather.date} className="weather-card">
+              <div className="weather-line">
+                <span className="weatherIcon">{dailyWeather.weatherIcon}</span>
+              </div>
+
               <div className="weather-line">
                 <span className="highlightDate">Date: {dailyWeather.date}</span>
               </div>

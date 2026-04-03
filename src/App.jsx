@@ -314,7 +314,7 @@ function App() {
 
     console.log("date today " + formatted);
 
-    // convert back to Date at midnight
+    // convert back to Date at midnight- TO DO
     let dateAtMidnight = new Date(formatted + "T00:00:00");
   }
 

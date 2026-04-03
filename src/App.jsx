@@ -116,20 +116,34 @@ function App() {
       const weatherApiData = await weatherResponse.json();
       console.log("weather data", weatherApiData);
 
-      //push each day into this array
-      const forecastDays = [];
+      let forecastDays = [];
+      let dailyWeather;
+      let checkCondition;
 
-      const weatherCondition = returnCondition(
-        weatherApiData.current_weather.weathercode,
-      );
+      //cycle through weather api data, let's stick daily into an array
+      for (let i = 0; i < weatherApiData.daily.time.length; i++) {
+        //lets construct JSON object and push that into array
 
-      const finalWeatherData = {
-        city: cityName,
-        temperature: weatherApiData.current_weather.temperature,
-        condition: weatherCondition,
-      };
+        checkCondition = returnCondition(weatherApiData.daily.weathercode[i]);
+
+        dailyWeather = {
+          city: cityName,
+          date: weatherApiData.daily.time[i],
+          temperature_max: weatherApiData.daily.temperature_2m_max[i],
+          temperature_min: weatherApiData.daily.temperature_2m_min[i],
+          condition: checkCondition,
+        };
+
+        //once constructed, push into array
+        //now push JSON object into array.
+        forecastDays.push(dailyWeather);
+      }
+
+      //check array
+      console.log(forecastDays);
+
       //save into state, trigger a re-render
-      setWeatherData(finalWeatherData);
+      setWeatherData(forecastDays);
 
       //if api call fails
     } catch (error) {
@@ -211,10 +225,25 @@ function App() {
     weatherBlock = <div>Loading weather data...</div>;
   } else if (weatherData) {
     weatherBlock = (
-      <div>
-        <div>Weather for {weatherData.city}</div>
-        <div>Temperature: {weatherData.temperature}</div>
-        <div>Condition: {weatherData.condition}</div>
+      <div className="weather-container">
+        <div className="weather-title">Weather for {weatherData[0].city}</div>
+
+        <div className="weather-grid">
+          {weatherData.map((dailyWeather) => (
+            <div key={dailyWeather.date} className="weather-card">
+              <div className="weather-line">
+                <span className="highlightDate">Date: {dailyWeather.date}</span>
+              </div>
+              <div className="weather-line">
+                Max: {dailyWeather.temperature_max}°C
+              </div>
+              <div className="weather-line">
+                Min: {dailyWeather.temperature_min}°C
+              </div>
+              <div className="weather-line">{dailyWeather.condition}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   } else {
@@ -225,8 +254,8 @@ function App() {
     <>
       <section id="center">
         <div>
-          <h1>Weather app</h1>
-          <p>Welcome to the Weather App!</p>
+          <h1>Daily weather app</h1>
+          <p>Welcome to the daily weather app!</p>
         </div>
         <div>
           <SearchInput

@@ -137,6 +137,7 @@ function App() {
       let dailyWeather;
       let checkCondition;
       let weatherSymbol;
+      let todaysDate;
 
       //cycle through weather api data, let's stick daily into an array
       for (let i = 0; i < weatherApiData.daily.time.length; i++) {
@@ -148,6 +149,9 @@ function App() {
 
         weatherSymbol = getWeatherIcon(weatherApiData.daily.weathercode[i]);
 
+        //check if entry is today's date
+        todaysDate = checkDate(weatherApiData.daily.time[i]);
+
         dailyWeather = {
           city: cityName,
           date: weatherApiData.daily.time[i],
@@ -155,6 +159,7 @@ function App() {
           temperature_min: weatherApiData.daily.temperature_2m_min[i],
           condition: checkCondition,
           weatherIcon: weatherSymbol,
+          isTodaysDate: todaysDate,
         };
 
         //once constructed, push into array
@@ -242,6 +247,7 @@ function App() {
     return "Unknown weather";
   }
 
+  //get icons
   function getWeatherIcon(weatherCode) {
     // Clear / clouds
     if (weatherCode === 0) return "☀️"; // Clear sky
@@ -294,6 +300,22 @@ function App() {
     if (weatherCode === 99) return "⛈️🧊";
 
     return "🌤️"; // default
+  }
+
+  //check date, get today's date
+  function checkDate(apiDate) {
+    let today = new Date();
+
+    let year = today.getFullYear();
+    let month = String(today.getMonth() + 1).padStart(2, "0");
+    let day = String(today.getDate()).padStart(2, "0");
+
+    let formatted = year + "-" + month + "-" + day;
+
+    console.log("date today " + formatted);
+
+    // convert back to Date at midnight
+    let dateAtMidnight = new Date(formatted + "T00:00:00");
   }
 
   /*condition ? valueIfTrue : valueIfFalse */

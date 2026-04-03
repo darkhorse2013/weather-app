@@ -2,7 +2,12 @@ import { useState } from "react";
 import "./App.css";
 
 //components, will be put into own files later on
-function SearchInput({ searchError, cityEntered, onChangeSearch }) {
+function SearchInput({
+  searchError,
+  cityEntered,
+  onChangeSearch,
+  keyboardPress,
+}) {
   return (
     <>
       <div>Type in a city</div>
@@ -13,6 +18,7 @@ function SearchInput({ searchError, cityEntered, onChangeSearch }) {
         id="searchCity"
         value={cityEntered}
         onChange={onChangeSearch}
+        onKeyDown={keyboardPress}
       ></input>
     </>
   );
@@ -60,10 +66,21 @@ function App() {
     setCity(event.target.value);
   }
 
+  //check for keyboard strokes
+  function onKeyDown(e) {
+    if (e.key === "Enter") {
+      searchWeather();
+    }
+  }
+
   //event handler for the button
+  function onSearchClick() {
+    searchWeather();
+  }
+
   //async - this function will deal with something that takes time
   //does not block other api calls on page, when it finishes, come back here and continue
-  async function onSearchClick() {
+  async function searchWeather() {
     //clear old errors
     setSearchError("");
     //if no City has been entered, display error message
@@ -328,6 +345,7 @@ function App() {
             searchError={showSearchError}
             cityEntered={cityEntered}
             onChangeSearch={onSearchChange}
+            keyboardPress={onKeyDown}
           ></SearchInput>
           <SearchButton
             onSearchButtonClick={onSearchClick}

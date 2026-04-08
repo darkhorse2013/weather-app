@@ -28,6 +28,10 @@ p {
 
 }
 
+.weatherDate {
+  font-weight: 600;
+}
+
 
 .highlightDate {
 

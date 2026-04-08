@@ -283,8 +283,7 @@ function App() {
 
     console.log("date today " + formatted);
 
-    // convert back to Date at midnight- TO DO
-    let dateAtMidnight = new Date(formatted + "T00:00:00");
+    return formatted === apiDate;
   }
 
   let weatherBlock;
@@ -303,7 +302,13 @@ function App() {
               </div>
 
               <div className="weather-line">
-                <span className="highlightDate">Date: {dailyWeather.date}</span>
+                <span
+                  className={
+                    dailyWeather.isTodaysDate ? "highlightDate" : "weatherDate"
+                  }
+                >
+                  Date: {dailyWeather.date}
+                </span>
               </div>
               <div className="weather-line">
                 Max: {dailyWeather.temperature_max}{"\u00B0C"}

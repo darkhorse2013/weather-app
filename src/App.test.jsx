@@ -41,4 +41,48 @@ describe("App", () => {
 
     expect(screen.queryByText(/please enter a city!/i)).not.toBeInTheDocument();
   });
+
+  it("highlights only today's forecast date after a successful search", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "London", latitude: 51.5072, longitude: -0.1276 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today), formatDate(tomorrow)],
+            weathercode: [0, 3],
+            temperature_2m_max: [18, 16],
+            temperature_2m_min: [11, 9],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "London");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(screen.getByText(`Date: ${formatDate(today)}`)).toHaveClass(
+      "highlightDate",
+    );
+    expect(screen.getByText(`Date: ${formatDate(tomorrow)}`)).toHaveClass(
+      "weatherDate",
+    );
+  });
 });

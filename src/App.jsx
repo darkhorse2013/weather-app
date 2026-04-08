@@ -122,16 +122,19 @@ function App() {
       let checkCondition;
       let weatherSymbol;
       let todaysDate;
+      let formattedDate;
 
       //cycle through weather api data, let's stick daily into an array
       for (let i = 0; i < weatherApiData.daily.time.length; i++) {
         checkCondition = returnCondition(weatherApiData.daily.weathercode[i]);
         weatherSymbol = getWeatherIcon(weatherApiData.daily.weathercode[i]);
         todaysDate = checkDate(weatherApiData.daily.time[i]);
+        formattedDate = formatForecastDate(weatherApiData.daily.time[i]);
 
         dailyWeather = {
           city: cityName,
           date: weatherApiData.daily.time[i],
+          displayDate: formattedDate,
           temperature_max: weatherApiData.daily.temperature_2m_max[i],
           temperature_min: weatherApiData.daily.temperature_2m_min[i],
           condition: checkCondition,
@@ -286,6 +289,29 @@ function App() {
     return formatted === apiDate;
   }
 
+  function formatForecastDate(apiDate) {
+    if (checkDate(apiDate)) {
+      return "Today";
+    }
+
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    let tomorrowYear = tomorrow.getFullYear();
+    let tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, "0");
+    let tomorrowDay = String(tomorrow.getDate()).padStart(2, "0");
+    let formattedTomorrow =
+      tomorrowYear + "-" + tomorrowMonth + "-" + tomorrowDay;
+
+    if (formattedTomorrow === apiDate) {
+      return "Tomorrow";
+    }
+
+    let parsedDate = new Date(apiDate + "T00:00:00");
+
+    return parsedDate.toLocaleDateString("en-GB", { weekday: "long" });
+  }
+
   let weatherBlock;
   if (isLoading) {
     weatherBlock = <div>Loading weather data...</div>;
@@ -307,7 +333,7 @@ function App() {
                     dailyWeather.isTodaysDate ? "highlightDate" : "weatherDate"
                   }
                 >
-                  Date: {dailyWeather.date}
+                  Date: {dailyWeather.displayDate}
                 </span>
               </div>
               <div className="weather-line">

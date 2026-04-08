@@ -11,7 +11,6 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Ideas
 
-- `WX-005` Format forecast dates as `Today`, `Tomorrow`, and weekday names instead of raw API dates.
 - `WX-006` Add a featured `Today` card above the forecast grid.
 - `WX-007` Add weather-based themes so the background and cards change with conditions.
 - `WX-008` Add saved cities using `localStorage` for quick repeat searches.
@@ -27,6 +26,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-005` Replaced raw forecast dates with `Today`, `Tomorrow`, and weekday labels.
 - `WX-004` Finished the date helper and now only highlights the current day in the forecast.
 - `WX-003` Replaced garbled weather icon text with safe Unicode escapes and fixed the temperature degree symbol.
 - `WX-001` Replaced the broken starter tests with app-specific baseline tests.

@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-047` Rebalanced the CNC palette toward darker neutral panel interiors with red used more as an accent for readability.
 - `WX-046` Added a faint CNC command-screen silhouette and extra corner HUD detail behind the main interface.
 - `WX-045` Added stronger CNC divider rails and corner accents to tie the sections together more like a tactical HUD.
 - `WX-043` Added a CNC button shimmer sweep and stronger active glow so the command controls feel more animated.

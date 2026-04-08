@@ -462,6 +462,7 @@ function App() {
 
       console.log(forecastDays);
       setWeatherData(forecastDays);
+      setCity("");
     } catch (error) {
       console.log(error);
       setSearchError("Something went wrong. Please try again.");

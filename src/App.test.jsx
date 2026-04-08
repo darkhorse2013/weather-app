@@ -357,6 +357,44 @@ describe("App", () => {
     expect(screen.getByText(/weather for berlin, de/i)).toBeInTheDocument();
   });
 
+  it("clears the search input after a successful search", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "London", latitude: 51.5072, longitude: -0.1276 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [0],
+            temperature_2m_max: [18],
+            temperature_2m_min: [11],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "London");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(screen.getByRole("textbox")).toHaveValue("");
+    expect(screen.getByPlaceholderText(/type in a city/i)).toBeInTheDocument();
+  });
+
   it("removes a saved city when its remove button is clicked", async () => {
     const user = userEvent.setup();
 

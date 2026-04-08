@@ -679,7 +679,6 @@ function App() {
       <section id="center" className={appThemeClass}>
         <div>
           <h1>Daily weather app</h1>
-          <p>Welcome to the daily weather app!</p>
         </div>
         <div>
           <SearchInput

@@ -3,6 +3,10 @@ import "./App.css";
 
 const SAVED_CITIES_KEY = "weather-app.saved-cities";
 
+function formatTemperature(value) {
+  return Math.round(value);
+}
+
 //components, will be put into own files later on
 function SearchInput({
   searchError,
@@ -296,8 +300,8 @@ function ForecastCard({ dailyWeather }) {
       </div>
       <div className="forecast-card-condition">{dailyWeather.condition}</div>
       <div className="forecast-card-range">
-        High {dailyWeather.temperature_max}{"\u00B0C"} / Low{" "}
-        {dailyWeather.temperature_min}{"\u00B0C"}
+        High {formatTemperature(dailyWeather.temperature_max)}{"\u00B0C"} / Low{" "}
+        {formatTemperature(dailyWeather.temperature_min)}{"\u00B0C"}
       </div>
     </div>
   );
@@ -760,8 +764,8 @@ function App() {
             <div className="today-card-date">{featuredWeather.displayDate}</div>
             <div className="today-card-condition">{featuredWeather.condition}</div>
             <div className="today-card-range">
-              High {featuredWeather.temperature_max}
-              {"\u00B0C"} / Low {featuredWeather.temperature_min}
+              High {formatTemperature(featuredWeather.temperature_max)}
+              {"\u00B0C"} / Low {formatTemperature(featuredWeather.temperature_min)}
               {"\u00B0C"}
             </div>
             <p className="today-card-summary">{weatherSummary}</p>

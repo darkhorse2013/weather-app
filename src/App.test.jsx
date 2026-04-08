@@ -343,4 +343,82 @@ describe("App", () => {
     expect(fetchSpy).toHaveBeenCalledTimes(2);
     expect(screen.getByText(/weather for berlin/i)).toBeInTheDocument();
   });
+
+  it("shows an umbrella summary for rainy weather", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "Manchester", latitude: 53.4808, longitude: -2.2426 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [61],
+            temperature_2m_max: [14],
+            temperature_2m_min: [9],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "Manchester");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(
+      screen.getByText(/take an umbrella, there is a good chance you will need it\./i),
+    ).toBeInTheDocument();
+  });
+
+  it("shows an outdoor summary for bright warm weather", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "Seville", latitude: 37.3891, longitude: -5.9845 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [0],
+            temperature_2m_max: [27],
+            temperature_2m_min: [16],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "Seville");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(
+      screen.getByText(/a bright, warm day is ahead, perfect for getting outside\./i),
+    ).toBeInTheDocument();
+  });
 });

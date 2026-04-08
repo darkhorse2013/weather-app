@@ -237,6 +237,13 @@ button:disabled {
   color: #e2e8f0;
 }
 
+.today-card-summary {
+  max-width: 36ch;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #dbeafe;
+}
+
 .today-card-icon {
   font-size: 72px;
   line-height: 1;

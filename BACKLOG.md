@@ -11,7 +11,6 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Ideas
 
-- `WX-009` Add a small weather summary message such as `Take an umbrella` or `Great day for a walk`.
 - `WX-010` Show location context from geocoding, such as country or region.
 - `WX-011` Add a Celsius/Fahrenheit toggle.
 - `WX-012` Add a simple temperature trend visual for the week.
@@ -23,6 +22,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-009` Added a rule-based weather summary message to the featured forecast card.
 - `WX-008` Added saved cities with `localStorage` for quick repeat searches.
 - `WX-007` Added weather-based themes so the page and featured forecast card react to conditions.
 - `WX-006` Added a featured `Today` card above the weekly forecast grid.

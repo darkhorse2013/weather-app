@@ -412,6 +412,54 @@ function App() {
     return "default";
   }
 
+  function getWeatherSummary(todayWeather) {
+    if (!todayWeather) {
+      return "";
+    }
+
+    const conditionText = todayWeather.condition.toLowerCase();
+    const maxTemp = todayWeather.temperature_max;
+    const minTemp = todayWeather.temperature_min;
+
+    if (conditionText.includes("thunderstorm")) {
+      return "Stormy skies today, so it is a good day to stay flexible.";
+    }
+
+    if (
+      conditionText.includes("rain") ||
+      conditionText.includes("drizzle") ||
+      conditionText.includes("shower")
+    ) {
+      return "Take an umbrella, there is a good chance you will need it.";
+    }
+
+    if (
+      conditionText.includes("snow") ||
+      conditionText.includes("freezing") ||
+      conditionText.includes("hail")
+    ) {
+      return "Wrap up warm, it looks like a proper cold-weather day.";
+    }
+
+    if (conditionText.includes("fog")) {
+      return "A misty start is on the cards, so give yourself a slower morning.";
+    }
+
+    if (maxTemp >= 24) {
+      return "A bright, warm day is ahead, perfect for getting outside.";
+    }
+
+    if (minTemp <= 5) {
+      return "A chilly start is coming, so layers will help.";
+    }
+
+    if (conditionText.includes("clear")) {
+      return "Clear skies should make this a lovely day for a walk.";
+    }
+
+    return "Steady weather today, with nothing too dramatic in the forecast.";
+  }
+
   let weatherBlock;
   let appThemeClass = "app-shell theme-default";
   if (isLoading) {
@@ -424,6 +472,7 @@ function App() {
       (dailyWeather) => dailyWeather.date !== featuredWeather.date,
     );
     const forecastTheme = getThemeName(featuredWeather.condition);
+    const weatherSummary = getWeatherSummary(featuredWeather);
 
     appThemeClass = `app-shell theme-${forecastTheme}`;
 
@@ -441,6 +490,7 @@ function App() {
               {"\u00B0C"} / Low {featuredWeather.temperature_min}
               {"\u00B0C"}
             </div>
+            <p className="today-card-summary">{weatherSummary}</p>
           </div>
           <div className="today-card-icon" aria-hidden="true">
             {featuredWeather.weatherIcon}

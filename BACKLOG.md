@@ -12,7 +12,6 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Ideas
 
-- `WX-019` Add a subtle fade-and-rise entrance animation to the featured weather card.
 - `WX-020` Add gentle weather-aware motion to the featured forecast icon.
 - `WX-021` Add a staggered reveal animation to the forecast cards after search results load.
 - `WX-011` Add a Celsius/Fahrenheit toggle.
@@ -24,6 +23,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-019` Added a subtle fade-and-rise entrance animation to the featured weather card.
 - `WX-018` Moved the city prompt into placeholder text so the search input starts cleaner.
 - `WX-017` Removed the welcome subtitle to give the app header a cleaner start.
 - `WX-016` Removed the extra top gap so the weather card sits flush with the page.

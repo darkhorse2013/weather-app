@@ -212,6 +212,7 @@ button:disabled {
   background: linear-gradient(135deg, #1d4ed8, #0f172a 70%);
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.45);
   text-align: left;
+  animation: featured-card-entrance 480ms ease-out both;
 }
 
 .theme-default .today-card {
@@ -283,6 +284,18 @@ button:disabled {
 .today-card-icon {
   font-size: 72px;
   line-height: 1;
+}
+
+@keyframes featured-card-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .trend-card {
@@ -416,5 +429,11 @@ button:disabled {
   }
 
   
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .today-card {
+    animation: none;
+  }
 }
 

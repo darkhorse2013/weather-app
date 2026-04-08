@@ -15,6 +15,7 @@ describe("App", () => {
     expect(
       screen.getByRole("heading", { name: /daily weather app/i }),
     ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/type in a city/i)).toBeInTheDocument();
     expect(screen.getByText(/no weather data yet/i)).toBeInTheDocument();
   });
 

@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-018` Moved the city prompt into placeholder text so the search input starts cleaner.
 - `WX-017` Removed the welcome subtitle to give the app header a cleaner start.
 - `WX-016` Removed the extra top gap so the weather card sits flush with the page.
 - `WX-015` Added remove buttons to saved city chips so saved searches can be pruned easily.

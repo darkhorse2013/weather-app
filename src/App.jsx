@@ -12,12 +12,12 @@ function SearchInput({
 }) {
   return (
     <>
-      <div>Type in a city</div>
       <div>
         <span className="incorrectValue">{searchError}</span>
       </div>
       <input
         id="searchCity"
+        placeholder="Type in a city"
         value={cityEntered}
         onChange={onChangeSearch}
         onKeyDown={keyboardPress}

@@ -312,6 +312,37 @@ button:disabled {
   background: linear-gradient(90deg, rgba(248, 113, 113, 0.65), transparent);
 }
 
+.theme-cnc .saved-cities,
+.theme-cnc .weather-container {
+  position: relative;
+}
+
+.theme-cnc .saved-cities::after,
+.theme-cnc .weather-container::before,
+.theme-cnc .weather-container::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+}
+
+.theme-cnc .saved-cities::after {
+  top: -6px;
+  background: linear-gradient(90deg, rgba(248, 113, 113, 0.85), transparent 72%);
+}
+
+.theme-cnc .weather-container::before {
+  top: -12px;
+  background: linear-gradient(90deg, transparent, rgba(248, 113, 113, 0.32), transparent);
+}
+
+.theme-cnc .weather-container::after {
+  bottom: -10px;
+  background: linear-gradient(90deg, rgba(248, 113, 113, 0.38), transparent 80%);
+}
+
 .theme-cnc #searchCity,
 .theme-cnc #searchButton,
 .theme-cnc .theme-toggle-button {
@@ -520,6 +551,29 @@ button:disabled {
 .theme-cnc .cnc-section-frame-primary .cnc-section-tab {
   background: linear-gradient(135deg, rgba(254, 202, 202, 0.95), rgba(220, 38, 38, 0.95));
   color: #450a0a;
+}
+
+.theme-cnc .cnc-section-frame::before,
+.theme-cnc .cnc-section-frame::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border-top: 1px solid rgba(248, 113, 113, 0.5);
+  pointer-events: none;
+}
+
+.theme-cnc .cnc-section-frame::before {
+  top: 10px;
+  left: 0;
+  border-left: 1px solid rgba(248, 113, 113, 0.5);
+}
+
+.theme-cnc .cnc-section-frame::after {
+  top: 10px;
+  right: 0;
+  border-right: 1px solid rgba(248, 113, 113, 0.5);
 }
 
 .icon-motion-cnc {

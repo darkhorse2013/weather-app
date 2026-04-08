@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-045` Added stronger CNC divider rails and corner accents to tie the sections together more like a tactical HUD.
 - `WX-043` Added a CNC button shimmer sweep and stronger active glow so the command controls feel more animated.
 - `WX-044` Deepened the CNC weather panels with stronger embossed edges, inset framing, and a more raised card treatment.
 - `WX-042` Limited the title status indicator so `ONLINE` only appears when the CNC theme is active.

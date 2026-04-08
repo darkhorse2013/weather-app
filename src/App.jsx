@@ -87,6 +87,9 @@ function TemperatureTrend({ forecastDays }) {
     return null;
   }
 
+  const [isVisible, setIsVisible] = useState(false);
+  const trendRef = useRef(null);
+
   const chartWidth = 620;
   const chartHeight = 180;
   const leftPadding = 24;
@@ -124,8 +127,46 @@ function TemperatureTrend({ forecastDays }) {
   const toPolylinePoints = (points) =>
     points.map((point) => `${point.x},${point.y}`).join(" ");
 
+  useEffect(() => {
+    setIsVisible(false);
+  }, [forecastDays]);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return;
+    }
+
+    const trendElement = trendRef.current;
+
+    if (!trendElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.2 },
+    );
+
+    observer.observe(trendElement);
+
+    return () => observer.disconnect();
+  }, [forecastDays]);
+
   return (
-    <div className="trend-card">
+    <div
+      ref={trendRef}
+      className={isVisible ? "trend-card trend-card-visible" : "trend-card"}
+    >
       <div className="trend-header">
         <div className="trend-title">Weekly temperature trend</div>
         <div className="trend-legend" aria-hidden="true">
@@ -141,18 +182,30 @@ function TemperatureTrend({ forecastDays }) {
         aria-label="Weekly temperature trend chart"
       >
         <polyline
-          className="trend-line trend-line-max"
+          className={
+            isVisible
+              ? "trend-line trend-line-max trend-line-visible"
+              : "trend-line trend-line-max"
+          }
           fill="none"
           points={toPolylinePoints(maxPoints)}
         />
         <polyline
-          className="trend-line trend-line-min"
+          className={
+            isVisible
+              ? "trend-line trend-line-min trend-line-visible"
+              : "trend-line trend-line-min"
+          }
           fill="none"
           points={toPolylinePoints(minPoints)}
         />
 
         {forecastDays.map((day, index) => (
-          <g key={day.date}>
+          <g
+            key={day.date}
+            className={isVisible ? "trend-point-group trend-point-group-visible" : "trend-point-group"}
+            style={{ transitionDelay: `${index * 90}ms` }}
+          >
             <circle
               className="trend-point trend-point-max"
               cx={maxPoints[index].x}

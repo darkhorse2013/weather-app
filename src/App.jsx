@@ -180,6 +180,78 @@ function TemperatureTrend({ forecastDays }) {
   );
 }
 
+function ForecastCard({ dailyWeather }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    setIsVisible(false);
+  }, [dailyWeather.date]);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return;
+    }
+
+    const cardElement = cardRef.current;
+
+    if (!cardElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(cardElement);
+
+    return () => observer.disconnect();
+  }, [dailyWeather.date]);
+
+  return (
+    <div
+      ref={cardRef}
+      className={
+        isVisible
+          ? "weather-card weather-card-revealed"
+          : "weather-card weather-card-hidden"
+      }
+    >
+      <div className="weather-line">
+        <span className="weatherIcon">{dailyWeather.weatherIcon}</span>
+      </div>
+
+      <div className="weather-line">
+        <span
+          className={
+            dailyWeather.isTodaysDate ? "highlightDate" : "weatherDate"
+          }
+        >
+          Date: {dailyWeather.displayDate}
+        </span>
+      </div>
+      <div className="weather-line">
+        Max: {dailyWeather.temperature_max}{"\u00B0C"}
+      </div>
+      <div className="weather-line">
+        Min: {dailyWeather.temperature_min}{"\u00B0C"}
+      </div>
+      <div className="weather-line">{dailyWeather.condition}</div>
+    </div>
+  );
+}
+
 function App() {
   // React state management
   const [cityEntered, setCity] = useState("");
@@ -189,8 +261,6 @@ function App() {
   //loading weather data
   const [isLoading, setIsLoading] = useState(false);
   const [savedCities, setSavedCities] = useState([]);
-  const [revealedForecastDates, setRevealedForecastDates] = useState([]);
-  const forecastCardRefs = useRef([]);
 
   useEffect(() => {
     const storedCities = window.localStorage.getItem(SAVED_CITIES_KEY);
@@ -213,59 +283,6 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(SAVED_CITIES_KEY, JSON.stringify(savedCities));
   }, [savedCities]);
-
-  useEffect(() => {
-    forecastCardRefs.current = [];
-    setRevealedForecastDates([]);
-
-    if (!weatherData) {
-      return;
-    }
-
-    const upcomingWeather = weatherData.filter(
-      (dailyWeather) => !dailyWeather.isTodaysDate,
-    );
-
-    if (typeof IntersectionObserver === "undefined") {
-      setRevealedForecastDates(upcomingWeather.map((dailyWeather) => dailyWeather.date));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
-
-          const forecastDate = entry.target.getAttribute("data-forecast-date");
-
-          if (!forecastDate) {
-            return;
-          }
-
-          setRevealedForecastDates((currentDates) => {
-            if (currentDates.includes(forecastDate)) {
-              return currentDates;
-            }
-
-            return [...currentDates, forecastDate];
-          });
-
-          observer.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.2 },
-    );
-
-    forecastCardRefs.current.forEach((cardRef) => {
-      if (cardRef) {
-        observer.observe(cardRef);
-      }
-    });
-
-    return () => observer.disconnect();
-  }, [weatherData]);
 
   //event handler for input box
   function onSearchChange(event) {
@@ -707,40 +724,8 @@ function App() {
 
         {upcomingWeather.length > 0 && (
           <div className="weather-grid">
-            {upcomingWeather.map((dailyWeather, index) => (
-              <div
-                key={dailyWeather.date}
-                ref={(element) => {
-                  forecastCardRefs.current[index] = element;
-                }}
-                data-forecast-date={dailyWeather.date}
-                className={
-                  revealedForecastDates.includes(dailyWeather.date)
-                    ? "weather-card weather-card-revealed"
-                    : "weather-card weather-card-hidden"
-                }
-              >
-                <div className="weather-line">
-                  <span className="weatherIcon">{dailyWeather.weatherIcon}</span>
-                </div>
-
-                <div className="weather-line">
-                  <span
-                    className={
-                      dailyWeather.isTodaysDate ? "highlightDate" : "weatherDate"
-                    }
-                  >
-                    Date: {dailyWeather.displayDate}
-                  </span>
-                </div>
-                <div className="weather-line">
-                  Max: {dailyWeather.temperature_max}{"\u00B0C"}
-                </div>
-                <div className="weather-line">
-                  Min: {dailyWeather.temperature_min}{"\u00B0C"}
-                </div>
-                <div className="weather-line">{dailyWeather.condition}</div>
-              </div>
+            {upcomingWeather.map((dailyWeather) => (
+              <ForecastCard key={dailyWeather.date} dailyWeather={dailyWeather} />
             ))}
           </div>
         )}

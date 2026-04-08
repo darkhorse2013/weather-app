@@ -179,7 +179,6 @@ describe("App", () => {
     await user.type(screen.getByRole("textbox"), "London");
     await user.click(screen.getByRole("button", { name: /search/i }));
 
-    expect(screen.getByText(/featured forecast/i)).toBeInTheDocument();
     expect(
       screen.getByText("Today", { selector: ".today-card-date" }),
     ).toBeInTheDocument();

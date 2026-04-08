@@ -249,14 +249,6 @@ button:disabled {
   gap: 8px;
 }
 
-.today-kicker {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #bfdbfe;
-}
-
 .today-card-date {
   font-size: 28px;
   font-weight: 700;
@@ -558,15 +550,6 @@ button:disabled {
 
 .forecast-card-icon {
   font-size: 42px;
-}
-
-.forecast-card-kicker {
-  margin-bottom: 8px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #bfdbfe;
 }
 
 .forecast-card-date {

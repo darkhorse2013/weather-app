@@ -285,7 +285,6 @@ function ForecastCard({ dailyWeather }) {
         <span className="weatherIcon forecast-card-icon">{dailyWeather.weatherIcon}</span>
       </div>
 
-      <div className="forecast-card-kicker">Next Up</div>
       <div
         className={
           dailyWeather.isTodaysDate
@@ -758,7 +757,6 @@ function App() {
 
         <div className="today-card">
           <div className="today-card-copy">
-            <div className="today-kicker">Featured Forecast</div>
             <div className="today-card-date">{featuredWeather.displayDate}</div>
             <div className="today-card-condition">{featuredWeather.condition}</div>
             <div className="today-card-range">

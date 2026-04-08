@@ -119,9 +119,20 @@ button:disabled {
 .search-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   gap: 10px;
+}
+
+.search-row > div:first-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+}
+
+#searchCity {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .options-button {
@@ -757,6 +768,11 @@ button:disabled {
   .search-row {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .search-row > div:first-child {
+    min-width: 0;
+    width: 100%;
   }
 
   .options-modal-backdrop {

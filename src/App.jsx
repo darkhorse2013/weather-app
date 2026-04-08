@@ -529,6 +529,15 @@ function App() {
     return "default";
   }
 
+  function getIconMotionClass(themeName) {
+    if (themeName === "storm") return "today-card-icon icon-motion-storm";
+    if (themeName === "rain") return "today-card-icon icon-motion-rain";
+    if (themeName === "snow") return "today-card-icon icon-motion-snow";
+    if (themeName === "fog") return "today-card-icon icon-motion-fog";
+
+    return "today-card-icon icon-motion-float";
+  }
+
   function getWeatherSummary(todayWeather) {
     if (!todayWeather) {
       return "";
@@ -612,6 +621,7 @@ function App() {
     );
     const forecastTheme = getThemeName(featuredWeather.condition);
     const weatherSummary = getWeatherSummary(featuredWeather);
+    const iconMotionClass = getIconMotionClass(forecastTheme);
 
     appThemeClass = `app-shell theme-${forecastTheme}`;
 
@@ -633,7 +643,7 @@ function App() {
             </div>
             <p className="today-card-summary">{weatherSummary}</p>
           </div>
-          <div className="today-card-icon" aria-hidden="true">
+          <div className={iconMotionClass} aria-hidden="true">
             {featuredWeather.weatherIcon}
           </div>
         </div>

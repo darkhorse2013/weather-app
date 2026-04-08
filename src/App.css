@@ -284,6 +284,27 @@ button:disabled {
 .today-card-icon {
   font-size: 72px;
   line-height: 1;
+  transform-origin: center;
+}
+
+.icon-motion-float {
+  animation: icon-float 4.8s ease-in-out infinite;
+}
+
+.icon-motion-rain {
+  animation: icon-rain 3.2s ease-in-out infinite;
+}
+
+.icon-motion-snow {
+  animation: icon-snow 5.6s ease-in-out infinite;
+}
+
+.icon-motion-fog {
+  animation: icon-fog 5.2s ease-in-out infinite;
+}
+
+.icon-motion-storm {
+  animation: icon-storm 3s ease-in-out infinite;
 }
 
 @keyframes featured-card-entrance {
@@ -295,6 +316,78 @@ button:disabled {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes icon-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes icon-rain {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(6px);
+  }
+
+  70% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes icon-snow {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateX(-6px) translateY(-4px) rotate(-4deg);
+  }
+
+  75% {
+    transform: translateX(6px) translateY(4px) rotate(4deg);
+  }
+}
+
+@keyframes icon-fog {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.92;
+  }
+
+  50% {
+    transform: translateX(8px);
+    opacity: 1;
+  }
+}
+
+@keyframes icon-storm {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+
+  20% {
+    transform: translateY(-4px) scale(1.04);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+  }
+
+  26% {
+    transform: translateY(2px) scale(0.98);
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.18));
   }
 }
 
@@ -432,7 +525,8 @@ button:disabled {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .today-card {
+  .today-card,
+  .today-card-icon {
     animation: none;
   }
 }

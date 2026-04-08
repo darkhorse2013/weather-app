@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-016` Removed the extra top gap so the weather card sits flush with the page.
 - `WX-015` Added remove buttons to saved city chips so saved searches can be pruned easily.
 - `WX-010` Added geocoded location context so results show town and country in the title.
 - `WX-012` Added a simple weekly temperature trend visual to the forecast results.

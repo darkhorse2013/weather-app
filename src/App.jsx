@@ -85,9 +85,7 @@ function App() {
     setSearchError("");
     //if no City has been entered, display error message
     if (cityEntered.trim().length === 0) {
-      //      showSearchError = "please enter a city";
       setSearchError("Please enter a city!");
-      //break out of function
       return;
     }
 
@@ -95,15 +93,10 @@ function App() {
     setIsLoading(true);
 
     try {
-      //go call the API and wait (await) until the response comes back
-      // await = pause here until this finishes, then continue
-      //get coorindates
-
       const geoResponse = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${cityEntered}&count=1&language=en&format=json`,
       );
 
-      //turn the API response into JavaScript data and wait for that too
       const geoData = await geoResponse.json();
       console.log("geocoding data", geoData);
 
@@ -116,15 +109,6 @@ function App() {
       const latitude = geoData.results[0].latitude;
       const longitude = geoData.results[0].longitude;
       const cityName = geoData.results[0].name;
-
-      //go call the API and wait (await) until the response comes back
-
-      /* single day
-      const weatherResponse = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`,
-      );
-
-      */
 
       const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`,
@@ -141,15 +125,8 @@ function App() {
 
       //cycle through weather api data, let's stick daily into an array
       for (let i = 0; i < weatherApiData.daily.time.length; i++) {
-        //lets construct JSON object and push that into array
-
         checkCondition = returnCondition(weatherApiData.daily.weathercode[i]);
-
-        //get Weather icon
-
         weatherSymbol = getWeatherIcon(weatherApiData.daily.weathercode[i]);
-
-        //check if entry is today's date
         todaysDate = checkDate(weatherApiData.daily.time[i]);
 
         dailyWeather = {
@@ -162,24 +139,16 @@ function App() {
           isTodaysDate: todaysDate,
         };
 
-        //once constructed, push into array
-        //now push JSON object into array.
         forecastDays.push(dailyWeather);
       }
 
-      //check array
       console.log(forecastDays);
-
-      //save into state, trigger a re-render
       setWeatherData(forecastDays);
-
-      //if api call fails
     } catch (error) {
       console.log(error);
       setSearchError("Something went wrong. Please try again.");
       setWeatherData(null);
     } finally {
-      //set loading state to false so it does no longer appears
       setIsLoading(false);
     }
   }
@@ -250,56 +219,56 @@ function App() {
   //get icons
   function getWeatherIcon(weatherCode) {
     // Clear / clouds
-    if (weatherCode === 0) return "☀️"; // Clear sky
-    if (weatherCode === 1) return "🌤️"; // Mainly clear
-    if (weatherCode === 2) return "⛅"; // Partly cloudy
-    if (weatherCode === 3) return "☁️"; // Overcast
+    if (weatherCode === 0) return "\u2600\uFE0F";
+    if (weatherCode === 1) return "\u{1F324}\uFE0F";
+    if (weatherCode === 2) return "\u26C5";
+    if (weatherCode === 3) return "\u2601\uFE0F";
 
     // Fog
-    if (weatherCode === 45) return "🌫️"; // Fog
-    if (weatherCode === 48) return "🌫️"; // Rime fog
+    if (weatherCode === 45) return "\u{1F32B}\uFE0F";
+    if (weatherCode === 48) return "\u{1F32B}\uFE0F";
 
     // Drizzle
-    if (weatherCode === 51) return "🌦️"; // Light drizzle
-    if (weatherCode === 53) return "🌦️"; // Moderate drizzle
-    if (weatherCode === 55) return "🌧️"; // Dense drizzle
+    if (weatherCode === 51) return "\u{1F326}\uFE0F";
+    if (weatherCode === 53) return "\u{1F326}\uFE0F";
+    if (weatherCode === 55) return "\u{1F327}\uFE0F";
 
     // Freezing drizzle
-    if (weatherCode === 56) return "🌧️❄️";
-    if (weatherCode === 57) return "🌧️❄️";
+    if (weatherCode === 56) return "\u{1F327}\uFE0F \u2744\uFE0F";
+    if (weatherCode === 57) return "\u{1F327}\uFE0F \u2744\uFE0F";
 
     // Rain
-    if (weatherCode === 61) return "🌧️";
-    if (weatherCode === 63) return "🌧️";
-    if (weatherCode === 65) return "🌧️";
+    if (weatherCode === 61) return "\u{1F327}\uFE0F";
+    if (weatherCode === 63) return "\u{1F327}\uFE0F";
+    if (weatherCode === 65) return "\u{1F327}\uFE0F";
 
     // Freezing rain
-    if (weatherCode === 66) return "🌧️❄️";
-    if (weatherCode === 67) return "🌧️❄️";
+    if (weatherCode === 66) return "\u{1F327}\uFE0F \u2744\uFE0F";
+    if (weatherCode === 67) return "\u{1F327}\uFE0F \u2744\uFE0F";
 
     // Snow
-    if (weatherCode === 71) return "❄️";
-    if (weatherCode === 73) return "❄️";
-    if (weatherCode === 75) return "❄️";
+    if (weatherCode === 71) return "\u2744\uFE0F";
+    if (weatherCode === 73) return "\u2744\uFE0F";
+    if (weatherCode === 75) return "\u2744\uFE0F";
 
-    if (weatherCode === 77) return "🌨️"; // Snow grains
+    if (weatherCode === 77) return "\u{1F328}\uFE0F";
 
     // Rain showers
-    if (weatherCode === 80) return "🌦️";
-    if (weatherCode === 81) return "🌧️";
-    if (weatherCode === 82) return "🌧️";
+    if (weatherCode === 80) return "\u{1F326}\uFE0F";
+    if (weatherCode === 81) return "\u{1F327}\uFE0F";
+    if (weatherCode === 82) return "\u{1F327}\uFE0F";
 
     // Snow showers
-    if (weatherCode === 85) return "🌨️";
-    if (weatherCode === 86) return "❄️";
+    if (weatherCode === 85) return "\u{1F328}\uFE0F";
+    if (weatherCode === 86) return "\u2744\uFE0F";
 
     // Thunderstorm
-    if (weatherCode === 95) return "⛈️";
+    if (weatherCode === 95) return "\u26C8\uFE0F";
 
-    if (weatherCode === 96) return "⛈️🧊";
-    if (weatherCode === 99) return "⛈️🧊";
+    if (weatherCode === 96) return "\u26C8\uFE0F \u{1F9CA}";
+    if (weatherCode === 99) return "\u26C8\uFE0F \u{1F9CA}";
 
-    return "🌤️"; // default
+    return "\u{1F324}\uFE0F";
   }
 
   //check date, get today's date
@@ -318,11 +287,8 @@ function App() {
     let dateAtMidnight = new Date(formatted + "T00:00:00");
   }
 
-  /*condition ? valueIfTrue : valueIfFalse */
-
   let weatherBlock;
   if (isLoading) {
-    //if is loading state has been triggered
     weatherBlock = <div>Loading weather data...</div>;
   } else if (weatherData) {
     weatherBlock = (
@@ -340,10 +306,10 @@ function App() {
                 <span className="highlightDate">Date: {dailyWeather.date}</span>
               </div>
               <div className="weather-line">
-                Max: {dailyWeather.temperature_max}°C
+                Max: {dailyWeather.temperature_max}{"\u00B0C"}
               </div>
               <div className="weather-line">
-                Min: {dailyWeather.temperature_min}°C
+                Min: {dailyWeather.temperature_min}{"\u00B0C"}
               </div>
               <div className="weather-line">{dailyWeather.condition}</div>
             </div>

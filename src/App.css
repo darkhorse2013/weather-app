@@ -117,9 +117,9 @@ button:disabled {
 }
 
 .search-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: end;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
   gap: 10px;
   width: 100%;
   max-width: 760px;
@@ -130,11 +130,18 @@ button:disabled {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 #searchCity {
   width: 100%;
   box-sizing: border-box;
+}
+
+#searchButton,
+.theme-toggle-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .theme-toggle-button {
@@ -175,9 +182,11 @@ button:disabled {
 
 .theme-cnc h1 {
   color: #fee2e2;
+  font-size: clamp(2rem, 5vw, 3rem);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-shadow: 0 0 14px rgba(239, 68, 68, 0.28);
+  white-space: nowrap;
 }
 
 .theme-cnc .saved-cities-label,
@@ -722,13 +731,17 @@ button:disabled {
   }
 
   .search-row {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    flex-wrap: wrap;
+  }
+
+  .search-row > div:first-child {
+    flex-basis: 100%;
   }
 }
 
 @media (max-width: 420px) {
-  .search-row {
-    grid-template-columns: 1fr;
+  .theme-cnc h1 {
+    white-space: normal;
   }
 }
 

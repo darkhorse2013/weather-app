@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-026` Slowed the weekly temperature trend animation so the chart motion reads more clearly.
 - `WX-025` Cleared the search input back to the placeholder after a successful search.
 - `WX-024` Animated the weekly temperature trend when it enters view.
 - `WX-023` Fixed the forecast card scroll-reveal logic so off-screen cards reliably appear when they enter view.

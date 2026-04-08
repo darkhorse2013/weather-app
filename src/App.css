@@ -400,7 +400,7 @@ button:disabled {
 }
 
 .trend-card-visible {
-  animation: trend-card-entrance 420ms ease-out both;
+  animation: trend-card-entrance 650ms ease-out both;
 }
 
 .trend-header {
@@ -456,7 +456,7 @@ button:disabled {
 }
 
 .trend-line-visible {
-  animation: trend-line-draw 1s ease-out forwards;
+  animation: trend-line-draw 1.6s ease-out forwards;
 }
 
 .trend-line-max,
@@ -481,8 +481,8 @@ button:disabled {
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity 260ms ease-out,
-    transform 260ms ease-out;
+    opacity 420ms ease-out,
+    transform 420ms ease-out;
 }
 
 .trend-point-group-visible {

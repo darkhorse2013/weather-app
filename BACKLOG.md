@@ -11,8 +11,6 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Ideas
 
-- `WX-001` Fix the broken starter tests so the repo has a reliable baseline.
-- `WX-002` Clean up leftover starter CSS and make the app styling feel more intentional.
 - `WX-003` Fix weather icon encoding so condition symbols render correctly.
 - `WX-004` Finish the `checkDate` helper and highlight the current day in the forecast.
 - `WX-005` Format forecast dates as `Today`, `Tomorrow`, and weekday names instead of raw API dates.
@@ -27,10 +25,13 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## In Progress
 
-- `WX-014` Set up a lightweight backlog and working rhythm for changes on the fork.
+- None right now.
 
 ## Done
 
+- `WX-001` Replaced the broken starter tests with app-specific baseline tests.
+- `WX-002` Removed leftover starter CSS from `src/index.css` so app styling is easier to control.
+- `WX-014` Set up a lightweight backlog and working rhythm for changes on the fork.
 - `WX-900` Forked the project to `wamballa/weather-app`.
 - `WX-901` Pushed the `steve-hack` branch to the fork and linked it to `origin/steve-hack`.
 - `WX-902` Verified local pushes go to the fork, not the original repository.

@@ -13,6 +13,40 @@ body {
   padding: 0 20px;
 }
 
+.app-title-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.app-title-panel-line {
+  width: min(100%, 860px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(248, 113, 113, 0.55), transparent);
+}
+
+.app-title-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #fca5a5;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #f43f5e;
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.55);
+}
+
 .app-shell {
   width: 100%;
   max-width: 1240px;
@@ -190,10 +224,54 @@ button:disabled {
   white-space: nowrap;
 }
 
+.theme-cnc .app-title-panel {
+  margin-bottom: 20px;
+  padding: 16px 22px 14px;
+}
+
+.theme-cnc .app-title-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  clip-path: polygon(4% 0, 96% 0, 100% 18%, 100% 82%, 96% 100%, 4% 100%, 0 82%, 0 18%);
+  background:
+    linear-gradient(180deg, rgba(69, 10, 10, 0.26), rgba(6, 6, 8, 0)),
+    radial-gradient(circle at top, rgba(239, 68, 68, 0.18), transparent 45%);
+  pointer-events: none;
+}
+
+.theme-cnc .app-title-panel-line {
+  display: none;
+}
+
+.theme-cnc .app-title-status {
+  position: relative;
+  z-index: 1;
+}
+
 .theme-cnc .saved-cities-label,
 .theme-cnc .weather-title,
 .theme-cnc .trend-title {
   color: #fecaca;
+}
+
+.theme-cnc .saved-cities-label,
+.theme-cnc .weather-title {
+  position: relative;
+  display: inline-block;
+  padding-top: 10px;
+}
+
+.theme-cnc .saved-cities-label::before,
+.theme-cnc .weather-title::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(248, 113, 113, 0.65), transparent);
 }
 
 .theme-cnc #searchCity,
@@ -295,6 +373,43 @@ button:disabled {
 .theme-cnc .today-card-range,
 .theme-cnc .today-card-summary {
   color: #fecaca;
+}
+
+.cnc-section-frame {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.cnc-section-tab {
+  display: none;
+}
+
+.theme-cnc .cnc-section-frame {
+  padding-top: 30px;
+}
+
+.theme-cnc .cnc-section-tab {
+  position: absolute;
+  top: 0;
+  left: 18px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 18px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(127, 29, 29, 0.95));
+  color: #fff1f2;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  box-shadow: 0 0 16px rgba(220, 38, 38, 0.22);
+}
+
+.theme-cnc .cnc-section-frame-primary .cnc-section-tab {
+  background: linear-gradient(135deg, rgba(254, 202, 202, 0.95), rgba(220, 38, 38, 0.95));
+  color: #450a0a;
 }
 
 .icon-motion-cnc {

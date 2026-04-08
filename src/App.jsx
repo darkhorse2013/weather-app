@@ -818,7 +818,9 @@ function App() {
           Weather for {weatherData[0].locationLabel ?? weatherData[0].city}
         </div>
 
-        <div className="today-card">
+        <div className="cnc-section-frame cnc-section-frame-primary">
+          <div className="cnc-section-tab">Command Briefing</div>
+          <div className="today-card">
           <div className="today-card-copy">
             <div className="today-card-date">{featuredWeather.displayDate}</div>
             <div className="today-card-condition">{displayThemeName}</div>
@@ -833,18 +835,25 @@ function App() {
             {featuredWeather.weatherIcon}
           </div>
         </div>
+        </div>
 
-        <TemperatureTrend forecastDays={weatherData}></TemperatureTrend>
+        <div className="cnc-section-frame">
+          <div className="cnc-section-tab">Forecast Data</div>
+          <TemperatureTrend forecastDays={weatherData}></TemperatureTrend>
+        </div>
 
         {upcomingWeather.length > 0 && (
-          <div className="weather-grid">
-            {upcomingWeather.map((dailyWeather) => (
-              <ForecastCard
-                key={dailyWeather.date}
-                dailyWeather={dailyWeather}
-                isCncTheme={isCncTheme}
-              />
-            ))}
+          <div className="cnc-section-frame">
+            <div className="cnc-section-tab">Next Days</div>
+            <div className="weather-grid">
+              {upcomingWeather.map((dailyWeather) => (
+                <ForecastCard
+                  key={dailyWeather.date}
+                  dailyWeather={dailyWeather}
+                  isCncTheme={isCncTheme}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -857,8 +866,13 @@ function App() {
   return (
     <>
       <section id="center" className={appThemeClass}>
-        <div>
+        <div className="app-title-panel">
+          <div className="app-title-panel-line" aria-hidden="true"></div>
           <h1>Daily weather app</h1>
+          <div className="app-title-status" aria-hidden="true">
+            <span className="status-dot"></span>
+            online
+          </div>
         </div>
         <div>
           <div className="search-row">

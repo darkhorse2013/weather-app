@@ -330,6 +330,7 @@ describe("App", () => {
             {
               name: "Berlin",
               country: "Germany",
+              country_code: "DE",
               latitude: 52.52,
               longitude: 13.405,
             },
@@ -352,7 +353,7 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Berlin" }));
 
     expect(fetchSpy).toHaveBeenCalledTimes(2);
-    expect(screen.getByText(/weather for berlin, germany/i)).toBeInTheDocument();
+    expect(screen.getByText(/weather for berlin, de/i)).toBeInTheDocument();
   });
 
   it("shows an umbrella summary for rainy weather", async () => {
@@ -508,6 +509,7 @@ describe("App", () => {
             {
               name: "York",
               country: "United Kingdom",
+              country_code: "GB",
               latitude: 53.959,
               longitude: -1.0815,
             },
@@ -531,7 +533,7 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: /search/i }));
 
     expect(
-      screen.getByText(/weather for york, united kingdom/i),
+      screen.getByText(/weather for york, uk/i),
     ).toBeInTheDocument();
   });
 });

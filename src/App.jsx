@@ -563,7 +563,13 @@ function App() {
   function formatLocationLabel(locationResult) {
     const cityName = locationResult.name;
     const countryName = locationResult.country;
+    const countryCode = locationResult.country_code?.toUpperCase();
     const regionName = locationResult.admin1;
+    const shortCountryName = countryCode === "GB" ? "UK" : countryCode;
+
+    if (cityName && shortCountryName) {
+      return `${cityName}, ${shortCountryName}`;
+    }
 
     if (cityName && countryName) {
       return `${cityName}, ${countryName}`;

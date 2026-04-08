@@ -53,6 +53,63 @@ function SearchButton({ onSearchButtonClick, isLoading }) {
   );
 }
 
+function OptionsButton({ onOpenOptions }) {
+  return (
+    <button
+      type="button"
+      className="options-button"
+      onClick={onOpenOptions}
+    >
+      Options
+    </button>
+  );
+}
+
+function OptionsModal({ isOpen, onClose }) {
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div
+      className="options-modal-backdrop"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        className="options-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="options-modal-title"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="options-modal-hex options-modal-hex-left" aria-hidden="true"></div>
+        <div className="options-modal-hex options-modal-hex-right" aria-hidden="true"></div>
+
+        <div className="options-modal-header">
+          <h2 id="options-modal-title">Options</h2>
+          <button
+            type="button"
+            className="options-modal-close"
+            aria-label="Close options"
+            onClick={onClose}
+          >
+            X
+          </button>
+        </div>
+
+        <div className="options-modal-panel">
+          <div className="options-modal-tab">Theme controls</div>
+          <p className="options-modal-copy">
+            Theme and color settings will live here next, including the
+            Default and C&amp;C styles you picked out.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SavedCities({ savedCities, activeCity, onSelectCity, onRemoveCity }) {
   if (savedCities.length === 0) {
     return null;
@@ -324,6 +381,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [savedCities, setSavedCities] = useState([]);
   const [activeSavedCity, setActiveSavedCity] = useState("");
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
   useEffect(() => {
     const storedCities = window.localStorage.getItem(SAVED_CITIES_KEY);
@@ -346,6 +404,22 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(SAVED_CITIES_KEY, JSON.stringify(savedCities));
   }, [savedCities]);
+
+  useEffect(() => {
+    if (!isOptionsOpen) {
+      return;
+    }
+
+    function handleEscape(event) {
+      if (event.key === "Escape") {
+        setIsOptionsOpen(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [isOptionsOpen]);
 
   //event handler for input box
   function onSearchChange(event) {
@@ -815,16 +889,21 @@ function App() {
           <h1>Daily weather app</h1>
         </div>
         <div>
-          <SearchInput
-            searchError={showSearchError}
-            cityEntered={cityEntered}
-            onChangeSearch={onSearchChange}
-            keyboardPress={onKeyDown}
-          ></SearchInput>
-          <SearchButton
-            onSearchButtonClick={onSearchClick}
-            isLoading={isLoading}
-          ></SearchButton>
+          <div className="search-row">
+            <SearchInput
+              searchError={showSearchError}
+              cityEntered={cityEntered}
+              onChangeSearch={onSearchChange}
+              keyboardPress={onKeyDown}
+            ></SearchInput>
+            <SearchButton
+              onSearchButtonClick={onSearchClick}
+              isLoading={isLoading}
+            ></SearchButton>
+            <OptionsButton
+              onOpenOptions={() => setIsOptionsOpen(true)}
+            ></OptionsButton>
+          </div>
           <SavedCities
             savedCities={savedCities}
             activeCity={activeSavedCity}
@@ -834,6 +913,10 @@ function App() {
           {weatherBlock}
         </div>
       </section>
+      <OptionsModal
+        isOpen={isOptionsOpen}
+        onClose={() => setIsOptionsOpen(false)}
+      ></OptionsModal>
     </>
   );
 }

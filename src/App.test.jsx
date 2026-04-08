@@ -44,6 +44,25 @@ describe("App", () => {
     expect(screen.queryByText(/please enter a city!/i)).not.toBeInTheDocument();
   });
 
+  it("opens and closes the options modal", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: /options/i }));
+
+    expect(screen.getByRole("dialog", { name: /options/i })).toBeInTheDocument();
+    expect(
+      screen.getByText(/theme and color settings will live here next/i),
+    ).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+
+    expect(
+      screen.queryByRole("dialog", { name: /options/i }),
+    ).not.toBeInTheDocument();
+  });
+
   it("highlights only today's forecast date after a successful search", async () => {
     const user = userEvent.setup();
     const today = new Date();

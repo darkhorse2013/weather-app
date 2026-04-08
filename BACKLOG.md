@@ -12,7 +12,6 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Ideas
 
-- `WX-021` Add a staggered reveal animation to the forecast cards after search results load.
 - `WX-011` Add a Celsius/Fahrenheit toggle.
 - `WX-013` Improve empty, loading, and error states so the app feels friendlier.
 
@@ -22,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-021` Added a staggered reveal animation to the forecast cards after search results load.
 - `WX-020` Added gentle weather-aware motion to the featured forecast icon.
 - `WX-019` Added a subtle fade-and-rise entrance animation to the featured weather card.
 - `WX-018` Moved the city prompt into placeholder text so the search input starts cleaner.

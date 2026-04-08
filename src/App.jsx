@@ -652,8 +652,12 @@ function App() {
 
         {upcomingWeather.length > 0 && (
           <div className="weather-grid">
-            {upcomingWeather.map((dailyWeather) => (
-              <div key={dailyWeather.date} className="weather-card">
+            {upcomingWeather.map((dailyWeather, index) => (
+              <div
+                key={dailyWeather.date}
+                className="weather-card weather-card-stagger"
+                style={{ animationDelay: `${index * 90}ms` }}
+              >
                 <div className="weather-line">
                   <span className="weatherIcon">{dailyWeather.weatherIcon}</span>
                 </div>

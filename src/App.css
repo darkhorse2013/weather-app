@@ -329,6 +329,13 @@ button:disabled {
   color: #fecaca;
 }
 
+.theme-cnc .app-title-panel,
+.theme-cnc .search-row,
+.theme-cnc .saved-cities,
+.theme-cnc .weather-container {
+  isolation: isolate;
+}
+
 .theme-cnc .saved-cities-label,
 .theme-cnc .weather-title {
   position: relative;
@@ -377,6 +384,17 @@ button:disabled {
 .theme-cnc .weather-container::after {
   bottom: -10px;
   background: linear-gradient(90deg, rgba(248, 113, 113, 0.38), transparent 80%);
+}
+
+.theme-cnc .search-row::before {
+  content: "";
+  position: absolute;
+  inset: -14px -12px -10px;
+  z-index: -1;
+  border-top: 1px solid rgba(248, 113, 113, 0.22);
+  border-bottom: 1px solid rgba(248, 113, 113, 0.14);
+  background: linear-gradient(180deg, rgba(248, 113, 113, 0.03), transparent 45%);
+  pointer-events: none;
 }
 
 .theme-cnc #searchCity,
@@ -569,6 +587,30 @@ button:disabled {
 .theme-cnc .today-card-range,
 .theme-cnc .today-card-summary {
   color: #f8d7d7;
+}
+
+.theme-cnc .cnc-section-tab {
+  box-shadow:
+    0 0 16px rgba(220, 38, 38, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.theme-cnc .trend-card,
+.theme-cnc .weather-card,
+.theme-cnc .weather-card-cnc {
+  background:
+    linear-gradient(180deg, rgba(72, 10, 10, 0.16), rgba(18, 18, 22, 0) 16%),
+    linear-gradient(180deg, rgba(8, 8, 11, 0.97), rgba(3, 3, 5, 0.99) 80%);
+}
+
+.theme-cnc .forecast-card-date,
+.theme-cnc .today-card-date {
+  color: #fff7f7;
+}
+
+.theme-cnc .forecast-card-condition,
+.theme-cnc .today-card-condition {
+  color: #f9dada;
 }
 
 .theme-cnc .saved-city-button,

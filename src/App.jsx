@@ -869,10 +869,12 @@ function App() {
         <div className="app-title-panel">
           <div className="app-title-panel-line" aria-hidden="true"></div>
           <h1>Daily weather app</h1>
-          <div className="app-title-status" aria-hidden="true">
-            <span className="status-dot"></span>
-            online
-          </div>
+          {isCncTheme && (
+            <div className="app-title-status" aria-hidden="true">
+              <span className="status-dot"></span>
+              online
+            </div>
+          )}
         </div>
         <div>
           <div className="search-row">

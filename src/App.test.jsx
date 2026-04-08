@@ -54,10 +54,12 @@ describe("App", () => {
     );
 
     expect(appShell).not.toHaveClass("theme-cnc");
+    expect(screen.queryByText(/online/i)).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /cnc/i }));
 
     expect(appShell).toHaveClass("theme-cnc");
+    expect(screen.getByText(/online/i)).toBeInTheDocument();
   });
 
   it("highlights only today's forecast date after a successful search", async () => {

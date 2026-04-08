@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-035` Replaced the options modal with a direct CNC theme toggle and kept the search controls on one compact row until narrow mobile widths.
 - `WX-034` Kept the search input, search button, and options button aligned on one row on larger screens.
 - `WX-031` Added an options button and modal shell to hold future theme controls.
 - `WX-030` Kept saved city chips in place when selected and highlighted the active city instead of reordering the list.

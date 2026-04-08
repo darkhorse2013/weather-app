@@ -44,23 +44,20 @@ describe("App", () => {
     expect(screen.queryByText(/please enter a city!/i)).not.toBeInTheDocument();
   });
 
-  it("opens and closes the options modal", async () => {
+  it("toggles the CNC theme from the control bar", async () => {
     const user = userEvent.setup();
 
     render(<App />);
 
-    await user.click(screen.getByRole("button", { name: /options/i }));
+    const appShell = screen.getByRole("heading", { name: /daily weather app/i }).closest(
+      ".app-shell",
+    );
 
-    expect(screen.getByRole("dialog", { name: /options/i })).toBeInTheDocument();
-    expect(
-      screen.getByText(/theme and color settings will live here next/i),
-    ).toBeInTheDocument();
+    expect(appShell).not.toHaveClass("theme-cnc");
 
-    await user.keyboard("{Escape}");
+    await user.click(screen.getByRole("button", { name: /cnc/i }));
 
-    expect(
-      screen.queryByRole("dialog", { name: /options/i }),
-    ).not.toBeInTheDocument();
+    expect(appShell).toHaveClass("theme-cnc");
   });
 
   it("highlights only today's forecast date after a successful search", async () => {

@@ -53,58 +53,103 @@ function SearchButton({ onSearchButtonClick, isLoading }) {
   );
 }
 
-function OptionsButton({ onOpenOptions }) {
+function ThemeToggleButton({ isCncTheme, onToggleTheme }) {
   return (
     <button
       type="button"
-      className="options-button"
-      onClick={onOpenOptions}
+      className={
+        isCncTheme
+          ? "theme-toggle-button theme-toggle-button-active"
+          : "theme-toggle-button"
+      }
+      onClick={onToggleTheme}
     >
-      Options
+      CNC
     </button>
   );
 }
 
-function OptionsModal({ isOpen, onClose }) {
-  if (!isOpen) {
-    return null;
+function getDisplayThemeClass(weatherTheme, isCncTheme) {
+  if (isCncTheme) {
+    return "theme-cnc";
   }
+
+  return `theme-${weatherTheme}`;
+}
+
+function getDisplayForecastCardClass(isVisible, isCncTheme) {
+  const visibilityClass = isVisible
+    ? "weather-card weather-card-revealed"
+    : "weather-card weather-card-hidden";
+
+  if (isCncTheme) {
+    return `${visibilityClass} weather-card-cnc`;
+  }
+
+  return visibilityClass;
+}
+
+function ForecastCard({ dailyWeather, isCncTheme }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    setIsVisible(false);
+  }, [dailyWeather.date]);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return;
+    }
+
+    const cardElement = cardRef.current;
+
+    if (!cardElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(cardElement);
+
+    return () => observer.disconnect();
+  }, [dailyWeather.date]);
 
   return (
     <div
-      className="options-modal-backdrop"
-      role="presentation"
-      onClick={onClose}
+      ref={cardRef}
+      className={getDisplayForecastCardClass(isVisible, isCncTheme)}
     >
+      <div className="forecast-card-icon-row">
+        <span className="weatherIcon forecast-card-icon">{dailyWeather.weatherIcon}</span>
+      </div>
+
       <div
-        className="options-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="options-modal-title"
-        onClick={(event) => event.stopPropagation()}
+        className={
+          dailyWeather.isTodaysDate
+            ? "forecast-card-date highlightDate"
+            : "forecast-card-date"
+        }
       >
-        <div className="options-modal-hex options-modal-hex-left" aria-hidden="true"></div>
-        <div className="options-modal-hex options-modal-hex-right" aria-hidden="true"></div>
-
-        <div className="options-modal-header">
-          <h2 id="options-modal-title">Options</h2>
-          <button
-            type="button"
-            className="options-modal-close"
-            aria-label="Close options"
-            onClick={onClose}
-          >
-            X
-          </button>
-        </div>
-
-        <div className="options-modal-panel">
-          <div className="options-modal-tab">Theme controls</div>
-          <p className="options-modal-copy">
-            Theme and color settings will live here next, including the
-            Default and C&amp;C styles you picked out.
-          </p>
-        </div>
+        {dailyWeather.displayDate}
+      </div>
+      <div className="forecast-card-condition">{dailyWeather.condition}</div>
+      <div className="forecast-card-range">
+        High {formatTemperature(dailyWeather.temperature_max)}{"\u00B0C"} / Low{" "}
+        {formatTemperature(dailyWeather.temperature_min)}{"\u00B0C"}
       </div>
     </div>
   );
@@ -301,76 +346,6 @@ function TemperatureTrend({ forecastDays }) {
   );
 }
 
-function ForecastCard({ dailyWeather }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef(null);
-
-  useEffect(() => {
-    setIsVisible(false);
-  }, [dailyWeather.date]);
-
-  useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") {
-      setIsVisible(true);
-      return;
-    }
-
-    const cardElement = cardRef.current;
-
-    if (!cardElement) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
-
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.15 },
-    );
-
-    observer.observe(cardElement);
-
-    return () => observer.disconnect();
-  }, [dailyWeather.date]);
-
-  return (
-    <div
-      ref={cardRef}
-      className={
-        isVisible
-          ? "weather-card weather-card-revealed"
-          : "weather-card weather-card-hidden"
-      }
-    >
-      <div className="forecast-card-icon-row">
-        <span className="weatherIcon forecast-card-icon">{dailyWeather.weatherIcon}</span>
-      </div>
-
-      <div
-        className={
-          dailyWeather.isTodaysDate
-            ? "forecast-card-date highlightDate"
-            : "forecast-card-date"
-        }
-      >
-        {dailyWeather.displayDate}
-      </div>
-      <div className="forecast-card-condition">{dailyWeather.condition}</div>
-      <div className="forecast-card-range">
-        High {formatTemperature(dailyWeather.temperature_max)}{"\u00B0C"} / Low{" "}
-        {formatTemperature(dailyWeather.temperature_min)}{"\u00B0C"}
-      </div>
-    </div>
-  );
-}
-
 function App() {
   // React state management
   const [cityEntered, setCity] = useState("");
@@ -381,7 +356,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [savedCities, setSavedCities] = useState([]);
   const [activeSavedCity, setActiveSavedCity] = useState("");
-  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const [isCncTheme, setIsCncTheme] = useState(false);
 
   useEffect(() => {
     const storedCities = window.localStorage.getItem(SAVED_CITIES_KEY);
@@ -404,22 +379,6 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(SAVED_CITIES_KEY, JSON.stringify(savedCities));
   }, [savedCities]);
-
-  useEffect(() => {
-    if (!isOptionsOpen) {
-      return;
-    }
-
-    function handleEscape(event) {
-      if (event.key === "Escape") {
-        setIsOptionsOpen(false);
-      }
-    }
-
-    window.addEventListener("keydown", handleEscape);
-
-    return () => window.removeEventListener("keydown", handleEscape);
-  }, [isOptionsOpen]);
 
   //event handler for input box
   function onSearchChange(event) {
@@ -840,10 +799,18 @@ function App() {
       (dailyWeather) => dailyWeather.date !== featuredWeather.date,
     );
     const forecastTheme = getThemeName(featuredWeather.condition);
-    const weatherSummary = getWeatherSummary(featuredWeather);
-    const iconMotionClass = getIconMotionClass(forecastTheme);
+    const weatherSummary = isCncTheme
+      ? "Command uplink stable. Field conditions uploaded and ready for briefing."
+      : getWeatherSummary(featuredWeather);
+    const iconMotionClass = isCncTheme
+      ? "today-card-icon icon-motion-cnc"
+      : getIconMotionClass(forecastTheme);
+    const displayThemeName = isCncTheme ? "CNC" : featuredWeather.condition;
 
-    appThemeClass = `app-shell theme-${forecastTheme}`;
+    appThemeClass = `app-shell ${getDisplayThemeClass(
+      forecastTheme,
+      isCncTheme,
+    )}`;
 
     weatherBlock = (
       <div className="weather-container">
@@ -854,7 +821,7 @@ function App() {
         <div className="today-card">
           <div className="today-card-copy">
             <div className="today-card-date">{featuredWeather.displayDate}</div>
-            <div className="today-card-condition">{featuredWeather.condition}</div>
+            <div className="today-card-condition">{displayThemeName}</div>
             <div className="today-card-range">
               High {formatTemperature(featuredWeather.temperature_max)}
               {"\u00B0C"} / Low {formatTemperature(featuredWeather.temperature_min)}
@@ -872,13 +839,18 @@ function App() {
         {upcomingWeather.length > 0 && (
           <div className="weather-grid">
             {upcomingWeather.map((dailyWeather) => (
-              <ForecastCard key={dailyWeather.date} dailyWeather={dailyWeather} />
+              <ForecastCard
+                key={dailyWeather.date}
+                dailyWeather={dailyWeather}
+                isCncTheme={isCncTheme}
+              />
             ))}
           </div>
         )}
       </div>
     );
   } else {
+    appThemeClass = `app-shell ${getDisplayThemeClass("default", isCncTheme)}`;
     weatherBlock = <div>No Weather Data Yet</div>;
   }
 
@@ -900,9 +872,10 @@ function App() {
               onSearchButtonClick={onSearchClick}
               isLoading={isLoading}
             ></SearchButton>
-            <OptionsButton
-              onOpenOptions={() => setIsOptionsOpen(true)}
-            ></OptionsButton>
+            <ThemeToggleButton
+              isCncTheme={isCncTheme}
+              onToggleTheme={() => setIsCncTheme((currentValue) => !currentValue)}
+            ></ThemeToggleButton>
           </div>
           <SavedCities
             savedCities={savedCities}
@@ -913,10 +886,6 @@ function App() {
           {weatherBlock}
         </div>
       </section>
-      <OptionsModal
-        isOpen={isOptionsOpen}
-        onClose={() => setIsOptionsOpen(false)}
-      ></OptionsModal>
     </>
   );
 }

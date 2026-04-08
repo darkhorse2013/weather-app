@@ -316,36 +316,61 @@ function App() {
   if (isLoading) {
     weatherBlock = <div>Loading weather data...</div>;
   } else if (weatherData) {
+    const featuredWeather =
+      weatherData.find((dailyWeather) => dailyWeather.isTodaysDate) ??
+      weatherData[0];
+    const upcomingWeather = weatherData.filter(
+      (dailyWeather) => dailyWeather.date !== featuredWeather.date,
+    );
+
     weatherBlock = (
       <div className="weather-container">
         <div className="weather-title">Weather for {weatherData[0].city}</div>
 
-        <div className="weather-grid">
-          {weatherData.map((dailyWeather) => (
-            <div key={dailyWeather.date} className="weather-card">
-              <div className="weather-line">
-                <span className="weatherIcon">{dailyWeather.weatherIcon}</span>
-              </div>
-
-              <div className="weather-line">
-                <span
-                  className={
-                    dailyWeather.isTodaysDate ? "highlightDate" : "weatherDate"
-                  }
-                >
-                  Date: {dailyWeather.displayDate}
-                </span>
-              </div>
-              <div className="weather-line">
-                Max: {dailyWeather.temperature_max}{"\u00B0C"}
-              </div>
-              <div className="weather-line">
-                Min: {dailyWeather.temperature_min}{"\u00B0C"}
-              </div>
-              <div className="weather-line">{dailyWeather.condition}</div>
+        <div className="today-card">
+          <div className="today-card-copy">
+            <div className="today-kicker">Featured Forecast</div>
+            <div className="today-card-date">{featuredWeather.displayDate}</div>
+            <div className="today-card-condition">{featuredWeather.condition}</div>
+            <div className="today-card-range">
+              High {featuredWeather.temperature_max}
+              {"\u00B0C"} / Low {featuredWeather.temperature_min}
+              {"\u00B0C"}
             </div>
-          ))}
+          </div>
+          <div className="today-card-icon" aria-hidden="true">
+            {featuredWeather.weatherIcon}
+          </div>
         </div>
+
+        {upcomingWeather.length > 0 && (
+          <div className="weather-grid">
+            {upcomingWeather.map((dailyWeather) => (
+              <div key={dailyWeather.date} className="weather-card">
+                <div className="weather-line">
+                  <span className="weatherIcon">{dailyWeather.weatherIcon}</span>
+                </div>
+
+                <div className="weather-line">
+                  <span
+                    className={
+                      dailyWeather.isTodaysDate ? "highlightDate" : "weatherDate"
+                    }
+                  >
+                    Date: {dailyWeather.displayDate}
+                  </span>
+                </div>
+                <div className="weather-line">
+                  Max: {dailyWeather.temperature_max}{"\u00B0C"}
+                </div>
+                <div className="weather-line">
+                  Min: {dailyWeather.temperature_min}{"\u00B0C"}
+                </div>
+                <div className="weather-line">{dailyWeather.condition}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   } else {

@@ -78,7 +78,7 @@ describe("App", () => {
     await user.type(screen.getByRole("textbox"), "London");
     await user.click(screen.getByRole("button", { name: /search/i }));
 
-    expect(screen.getByText("Date: Today")).toHaveClass("highlightDate");
+    expect(screen.getByText("Today")).toHaveClass("today-card-date");
     expect(screen.getByText("Date: Tomorrow")).toHaveClass(
       "weatherDate",
     );
@@ -130,5 +130,55 @@ describe("App", () => {
     expect(screen.getByText(`Date: ${weekdayLabel}`)).toHaveClass(
       "weatherDate",
     );
+  });
+
+  it("shows a featured today card above the remaining forecast cards", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+    const tomorrow = new Date(today);
+    const nextDay = new Date(today);
+
+    tomorrow.setDate(today.getDate() + 1);
+    nextDay.setDate(today.getDate() + 2);
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    const nextDayLabel = nextDay.toLocaleDateString("en-GB", {
+      weekday: "long",
+    });
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "London", latitude: 51.5072, longitude: -0.1276 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today), formatDate(tomorrow), formatDate(nextDay)],
+            weathercode: [0, 3, 61],
+            temperature_2m_max: [18, 16, 15],
+            temperature_2m_min: [11, 9, 8],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "London");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(screen.getByText(/featured forecast/i)).toBeInTheDocument();
+    expect(screen.getByText("Today")).toBeInTheDocument();
+    expect(screen.getByText(/high 18/i)).toBeInTheDocument();
+    expect(screen.getByText("Date: Tomorrow")).toBeInTheDocument();
+    expect(screen.getByText(`Date: ${nextDayLabel}`)).toBeInTheDocument();
   });
 });

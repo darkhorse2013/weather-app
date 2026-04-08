@@ -8,6 +8,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 - Move an item to `In Progress` when we start coding it.
 - Move an item to `Done` when the code is merged into our branch.
 - Keep commits focused on one change at a time so git history stays easy to follow.
+- Add a backlog entry for every shipped improvement so the audit trail stays complete.
 
 ## Ideas
 
@@ -20,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-015` Added remove buttons to saved city chips so saved searches can be pruned easily.
 - `WX-010` Added geocoded location context so results show town and country in the title.
 - `WX-012` Added a simple weekly temperature trend visual to the forecast results.
 - `WX-009` Added a rule-based weather summary message to the featured forecast card.

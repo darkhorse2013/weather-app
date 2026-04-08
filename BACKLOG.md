@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-043` Added a CNC button shimmer sweep and stronger active glow so the command controls feel more animated.
 - `WX-044` Deepened the CNC weather panels with stronger embossed edges, inset framing, and a more raised card treatment.
 - `WX-042` Limited the title status indicator so `ONLINE` only appears when the CNC theme is active.
 - `WX-041` Upgraded CNC typography and active control states so the theme reads more like a tactical game interface.

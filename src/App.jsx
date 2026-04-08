@@ -49,7 +49,7 @@ function SearchButton({ onSearchButtonClick, isLoading }) {
   );
 }
 
-function SavedCities({ savedCities, onSelectCity }) {
+function SavedCities({ savedCities, onSelectCity, onRemoveCity }) {
   if (savedCities.length === 0) {
     return null;
   }
@@ -59,14 +59,23 @@ function SavedCities({ savedCities, onSelectCity }) {
       <div className="saved-cities-label">Saved cities</div>
       <div className="saved-cities-list">
         {savedCities.map((city) => (
-          <button
-            key={city}
-            type="button"
-            className="saved-city-chip"
-            onClick={() => onSelectCity(city)}
-          >
-            {city}
-          </button>
+          <div key={city} className="saved-city-chip">
+            <button
+              type="button"
+              className="saved-city-button"
+              onClick={() => onSelectCity(city)}
+            >
+              {city}
+            </button>
+            <button
+              type="button"
+              className="saved-city-remove"
+              aria-label={`Remove ${city}`}
+              onClick={() => onRemoveCity(city)}
+            >
+              X
+            </button>
+          </div>
         ))}
       </div>
     </div>
@@ -244,6 +253,14 @@ function App() {
 
       return [normalizedCity, ...filteredCities].slice(0, 5);
     });
+  }
+
+  function removeSavedCity(cityName) {
+    setSavedCities((currentCities) =>
+      currentCities.filter(
+        (savedCity) => savedCity.toLowerCase() !== cityName.toLowerCase(),
+      ),
+    );
   }
 
   //async - this function will deal with something that takes time
@@ -678,6 +695,7 @@ function App() {
           <SavedCities
             savedCities={savedCities}
             onSelectCity={onSavedCityClick}
+            onRemoveCity={removeSavedCity}
           ></SavedCities>
           {weatherBlock}
         </div>

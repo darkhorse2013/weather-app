@@ -356,6 +356,27 @@ describe("App", () => {
     expect(screen.getByText(/weather for berlin, de/i)).toBeInTheDocument();
   });
 
+  it("removes a saved city when its remove button is clicked", async () => {
+    const user = userEvent.setup();
+
+    window.localStorage.setItem(
+      "weather-app.saved-cities",
+      JSON.stringify(["Berlin", "York"]),
+    );
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: /remove berlin/i }));
+
+    expect(
+      screen.queryByRole("button", { name: "Berlin" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "York" })).toBeInTheDocument();
+    expect(JSON.parse(window.localStorage.getItem("weather-app.saved-cities"))).toEqual([
+      "York",
+    ]);
+  });
+
   it("shows an umbrella summary for rainy weather", async () => {
     const user = userEvent.setup();
     const today = new Date();

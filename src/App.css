@@ -139,13 +139,50 @@ button:disabled {
 }
 
 .saved-city-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 12px;
   border: 1px solid rgba(191, 219, 254, 0.35);
   background: rgba(30, 41, 59, 0.78);
-  color: #e2e8f0;
+  border-radius: 999px;
 }
 
 .saved-city-chip:hover {
   background: rgba(59, 130, 246, 0.35);
+}
+
+.saved-city-button,
+.saved-city-remove {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #e2e8f0;
+}
+
+.saved-city-button {
+  font-size: 14px;
+}
+
+.saved-city-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(148, 163, 184, 0.2);
+}
+
+.saved-city-button:hover,
+.saved-city-remove:hover {
+  background: transparent;
+}
+
+.saved-city-remove:hover {
+  background: rgba(248, 113, 113, 0.24);
 }
 
 .incorrectValue {

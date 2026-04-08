@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-037` Reduced the CNC title sizing and spacing so the app heading stays compact on narrower cards.
 - `WX-036` Tightened the CNC heading and made the search controls hold a single row more reliably on medium-narrow screens.
 - `WX-035` Replaced the options modal with a direct CNC theme toggle and kept the search controls on one compact row until narrow mobile widths.
 - `WX-034` Kept the search input, search button, and options button aligned on one row on larger screens.

@@ -182,8 +182,9 @@ button:disabled {
 
 .theme-cnc h1 {
   color: #fee2e2;
-  font-size: clamp(2rem, 5vw, 3rem);
-  letter-spacing: 0.06em;
+  font-size: clamp(1.35rem, 3.2vw, 2.35rem);
+  letter-spacing: 0.03em;
+  line-height: 1.05;
   text-transform: uppercase;
   text-shadow: 0 0 14px rgba(239, 68, 68, 0.28);
   white-space: nowrap;

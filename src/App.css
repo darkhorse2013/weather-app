@@ -391,18 +391,6 @@ button:disabled {
   }
 }
 
-@keyframes forecast-card-stagger {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 .trend-card {
   margin-bottom: 24px;
   padding: 20px 20px 16px;
@@ -493,9 +481,17 @@ button:disabled {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-.weather-card-stagger {
+.weather-card-hidden {
   opacity: 0;
-  animation: forecast-card-stagger 420ms ease-out both;
+  transform: translateY(14px) scale(0.98);
+}
+
+.weather-card-revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 420ms ease-out,
+    transform 420ms ease-out;
 }
 
 .theme-sunny .weather-card {
@@ -544,9 +540,12 @@ button:disabled {
 @media (prefers-reduced-motion: reduce) {
   .today-card,
   .today-card-icon,
-  .weather-card-stagger {
+  .weather-card-hidden,
+  .weather-card-revealed {
     animation: none;
     opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 

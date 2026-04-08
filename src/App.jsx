@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 const SAVED_CITIES_KEY = "weather-app.saved-cities";
@@ -189,6 +189,8 @@ function App() {
   //loading weather data
   const [isLoading, setIsLoading] = useState(false);
   const [savedCities, setSavedCities] = useState([]);
+  const [revealedForecastDates, setRevealedForecastDates] = useState([]);
+  const forecastCardRefs = useRef([]);
 
   useEffect(() => {
     const storedCities = window.localStorage.getItem(SAVED_CITIES_KEY);
@@ -211,6 +213,59 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(SAVED_CITIES_KEY, JSON.stringify(savedCities));
   }, [savedCities]);
+
+  useEffect(() => {
+    forecastCardRefs.current = [];
+    setRevealedForecastDates([]);
+
+    if (!weatherData) {
+      return;
+    }
+
+    const upcomingWeather = weatherData.filter(
+      (dailyWeather) => !dailyWeather.isTodaysDate,
+    );
+
+    if (typeof IntersectionObserver === "undefined") {
+      setRevealedForecastDates(upcomingWeather.map((dailyWeather) => dailyWeather.date));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          const forecastDate = entry.target.getAttribute("data-forecast-date");
+
+          if (!forecastDate) {
+            return;
+          }
+
+          setRevealedForecastDates((currentDates) => {
+            if (currentDates.includes(forecastDate)) {
+              return currentDates;
+            }
+
+            return [...currentDates, forecastDate];
+          });
+
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.2 },
+    );
+
+    forecastCardRefs.current.forEach((cardRef) => {
+      if (cardRef) {
+        observer.observe(cardRef);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [weatherData]);
 
   //event handler for input box
   function onSearchChange(event) {
@@ -655,8 +710,15 @@ function App() {
             {upcomingWeather.map((dailyWeather, index) => (
               <div
                 key={dailyWeather.date}
-                className="weather-card weather-card-stagger"
-                style={{ animationDelay: `${index * 90}ms` }}
+                ref={(element) => {
+                  forecastCardRefs.current[index] = element;
+                }}
+                data-forecast-date={dailyWeather.date}
+                className={
+                  revealedForecastDates.includes(dailyWeather.date)
+                    ? "weather-card weather-card-revealed"
+                    : "weather-card weather-card-hidden"
+                }
               >
                 <div className="weather-line">
                   <span className="weatherIcon">{dailyWeather.weatherIcon}</span>

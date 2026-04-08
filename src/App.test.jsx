@@ -326,7 +326,14 @@ describe("App", () => {
       .spyOn(globalThis, "fetch")
       .mockResolvedValueOnce({
         json: async () => ({
-          results: [{ name: "Berlin", latitude: 52.52, longitude: 13.405 }],
+          results: [
+            {
+              name: "Berlin",
+              country: "Germany",
+              latitude: 52.52,
+              longitude: 13.405,
+            },
+          ],
         }),
       })
       .mockResolvedValueOnce({
@@ -345,7 +352,7 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Berlin" }));
 
     expect(fetchSpy).toHaveBeenCalledTimes(2);
-    expect(screen.getByText(/weather for berlin/i)).toBeInTheDocument();
+    expect(screen.getByText(/weather for berlin, germany/i)).toBeInTheDocument();
   });
 
   it("shows an umbrella summary for rainy weather", async () => {
@@ -479,6 +486,52 @@ describe("App", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(nextDayLabel, { selector: ".trend-label" }),
+    ).toBeInTheDocument();
+  });
+
+  it("shows town and country in the weather title", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [
+            {
+              name: "York",
+              country: "United Kingdom",
+              latitude: 53.959,
+              longitude: -1.0815,
+            },
+          ],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [3],
+            temperature_2m_max: [13],
+            temperature_2m_min: [6],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "York");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(
+      screen.getByText(/weather for york, united kingdom/i),
     ).toBeInTheDocument();
   });
 });

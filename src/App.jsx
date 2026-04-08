@@ -279,6 +279,7 @@ function App() {
       const latitude = geoData.results[0].latitude;
       const longitude = geoData.results[0].longitude;
       const cityName = geoData.results[0].name;
+      const locationLabel = formatLocationLabel(geoData.results[0]);
       saveCity(cityName);
 
       const weatherResponse = await fetch(
@@ -304,6 +305,7 @@ function App() {
 
         dailyWeather = {
           city: cityName,
+          locationLabel,
           date: weatherApiData.daily.time[i],
           displayDate: formattedDate,
           temperature_max: weatherApiData.daily.temperature_2m_max[i],
@@ -558,6 +560,22 @@ function App() {
     return "Steady weather today, with nothing too dramatic in the forecast.";
   }
 
+  function formatLocationLabel(locationResult) {
+    const cityName = locationResult.name;
+    const countryName = locationResult.country;
+    const regionName = locationResult.admin1;
+
+    if (cityName && countryName) {
+      return `${cityName}, ${countryName}`;
+    }
+
+    if (cityName && regionName) {
+      return `${cityName}, ${regionName}`;
+    }
+
+    return cityName;
+  }
+
   let weatherBlock;
   let appThemeClass = "app-shell theme-default";
   if (isLoading) {
@@ -576,7 +594,9 @@ function App() {
 
     weatherBlock = (
       <div className="weather-container">
-        <div className="weather-title">Weather for {weatherData[0].city}</div>
+        <div className="weather-title">
+          Weather for {weatherData[0].locationLabel ?? weatherData[0].city}
+        </div>
 
         <div className="today-card">
           <div className="today-card-copy">

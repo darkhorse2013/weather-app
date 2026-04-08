@@ -11,7 +11,6 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Ideas
 
-- `WX-010` Show location context from geocoding, such as country or region.
 - `WX-011` Add a Celsius/Fahrenheit toggle.
 - `WX-013` Improve empty, loading, and error states so the app feels friendlier.
 
@@ -21,6 +20,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-010` Added geocoded location context so results show town and country in the title.
 - `WX-012` Added a simple weekly temperature trend visual to the forecast results.
 - `WX-009` Added a rule-based weather summary message to the featured forecast card.
 - `WX-008` Added saved cities with `localStorage` for quick repeat searches.

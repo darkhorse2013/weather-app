@@ -249,6 +249,82 @@ button:disabled {
   line-height: 1;
 }
 
+.trend-card {
+  margin-bottom: 24px;
+  padding: 20px 20px 16px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.16);
+}
+
+.trend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.trend-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.trend-legend {
+  display: flex;
+  gap: 16px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.trend-legend-item::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 999px;
+}
+
+.trend-legend-max::before {
+  background: #f97316;
+}
+
+.trend-legend-min::before {
+  background: #38bdf8;
+}
+
+.trend-chart {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.trend-line {
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trend-line-max,
+.trend-point-max {
+  stroke: #f97316;
+  fill: #f97316;
+}
+
+.trend-line-min,
+.trend-point-min {
+  stroke: #38bdf8;
+  fill: #38bdf8;
+}
+
+.trend-label {
+  fill: #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .weather-grid {
   display: grid;
   grid-template-columns: repeat(4, 220px);
@@ -287,6 +363,11 @@ button:disabled {
   .today-card {
     flex-direction: column;
     text-align: center;
+  }
+
+  .trend-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .weather-grid {

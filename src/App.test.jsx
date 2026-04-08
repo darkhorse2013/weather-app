@@ -79,7 +79,9 @@ describe("App", () => {
     await user.type(screen.getByRole("textbox"), "London");
     await user.click(screen.getByRole("button", { name: /search/i }));
 
-    expect(screen.getByText("Today")).toHaveClass("today-card-date");
+    expect(screen.getByText("Today", { selector: ".today-card-date" })).toHaveClass(
+      "today-card-date",
+    );
     expect(screen.getByText("Date: Tomorrow")).toHaveClass(
       "weatherDate",
     );
@@ -177,7 +179,9 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: /search/i }));
 
     expect(screen.getByText(/featured forecast/i)).toBeInTheDocument();
-    expect(screen.getByText("Today")).toBeInTheDocument();
+    expect(
+      screen.getByText("Today", { selector: ".today-card-date" }),
+    ).toBeInTheDocument();
     expect(screen.getByText(/high 18/i)).toBeInTheDocument();
     expect(screen.getByText("Date: Tomorrow")).toBeInTheDocument();
     expect(screen.getByText(`Date: ${nextDayLabel}`)).toBeInTheDocument();
@@ -419,6 +423,62 @@ describe("App", () => {
 
     expect(
       screen.getByText(/a bright, warm day is ahead, perfect for getting outside\./i),
+    ).toBeInTheDocument();
+  });
+
+  it("renders a weekly temperature trend chart for multi-day forecasts", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+    const tomorrow = new Date(today);
+    const nextDay = new Date(today);
+
+    tomorrow.setDate(today.getDate() + 1);
+    nextDay.setDate(today.getDate() + 2);
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    const nextDayLabel = nextDay.toLocaleDateString("en-GB", {
+      weekday: "long",
+    });
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "Oslo", latitude: 59.9139, longitude: 10.7522 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today), formatDate(tomorrow), formatDate(nextDay)],
+            weathercode: [0, 3, 61],
+            temperature_2m_max: [12, 14, 10],
+            temperature_2m_min: [4, 6, 3],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "Oslo");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(
+      screen.getByRole("img", { name: /weekly temperature trend chart/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/weekly temperature trend/i)).toBeInTheDocument();
+    expect(screen.getByText("Today", { selector: ".trend-label" })).toBeInTheDocument();
+    expect(
+      screen.getByText("Tomorrow", { selector: ".trend-label" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(nextDayLabel, { selector: ".trend-label" }),
     ).toBeInTheDocument();
   });
 });

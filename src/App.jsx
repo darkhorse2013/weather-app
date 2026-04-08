@@ -73,6 +73,104 @@ function SavedCities({ savedCities, onSelectCity }) {
   );
 }
 
+function TemperatureTrend({ forecastDays }) {
+  if (!forecastDays || forecastDays.length < 2) {
+    return null;
+  }
+
+  const chartWidth = 620;
+  const chartHeight = 180;
+  const leftPadding = 24;
+  const rightPadding = 24;
+  const topPadding = 20;
+  const bottomPadding = 36;
+  const usableWidth = chartWidth - leftPadding - rightPadding;
+  const usableHeight = chartHeight - topPadding - bottomPadding;
+  const allTemperatures = forecastDays.flatMap((day) => [
+    day.temperature_max,
+    day.temperature_min,
+  ]);
+  const maxTemperature = Math.max(...allTemperatures);
+  const minTemperature = Math.min(...allTemperatures);
+  const temperatureRange = Math.max(maxTemperature - minTemperature, 1);
+
+  const createPoint = (temperature, index) => {
+    const x =
+      leftPadding +
+      (forecastDays.length === 1 ? 0 : (usableWidth / (forecastDays.length - 1)) * index);
+    const y =
+      topPadding +
+      ((maxTemperature - temperature) / temperatureRange) * usableHeight;
+
+    return { x, y };
+  };
+
+  const maxPoints = forecastDays.map((day, index) =>
+    createPoint(day.temperature_max, index),
+  );
+  const minPoints = forecastDays.map((day, index) =>
+    createPoint(day.temperature_min, index),
+  );
+
+  const toPolylinePoints = (points) =>
+    points.map((point) => `${point.x},${point.y}`).join(" ");
+
+  return (
+    <div className="trend-card">
+      <div className="trend-header">
+        <div className="trend-title">Weekly temperature trend</div>
+        <div className="trend-legend" aria-hidden="true">
+          <span className="trend-legend-item trend-legend-max">Highs</span>
+          <span className="trend-legend-item trend-legend-min">Lows</span>
+        </div>
+      </div>
+
+      <svg
+        className="trend-chart"
+        viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+        role="img"
+        aria-label="Weekly temperature trend chart"
+      >
+        <polyline
+          className="trend-line trend-line-max"
+          fill="none"
+          points={toPolylinePoints(maxPoints)}
+        />
+        <polyline
+          className="trend-line trend-line-min"
+          fill="none"
+          points={toPolylinePoints(minPoints)}
+        />
+
+        {forecastDays.map((day, index) => (
+          <g key={day.date}>
+            <circle
+              className="trend-point trend-point-max"
+              cx={maxPoints[index].x}
+              cy={maxPoints[index].y}
+              r="4"
+            />
+            <circle
+              className="trend-point trend-point-min"
+              cx={minPoints[index].x}
+              cy={minPoints[index].y}
+              r="4"
+            />
+            <text
+              className="trend-label"
+              x={maxPoints[index].x}
+              y={chartHeight - 12}
+              textAnchor="middle"
+            >
+              {day.displayDate}
+            </text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 function App() {
   // React state management
   const [cityEntered, setCity] = useState("");
@@ -496,6 +594,8 @@ function App() {
             {featuredWeather.weatherIcon}
           </div>
         </div>
+
+        <TemperatureTrend forecastDays={weatherData}></TemperatureTrend>
 
         {upcomingWeather.length > 0 && (
           <div className="weather-grid">

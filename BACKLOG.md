@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-044` Deepened the CNC weather panels with stronger embossed edges, inset framing, and a more raised card treatment.
 - `WX-042` Limited the title status indicator so `ONLINE` only appears when the CNC theme is active.
 - `WX-041` Upgraded CNC typography and active control states so the theme reads more like a tactical game interface.
 - `WX-040` Added CNC HUD textures and ambient red overlay details behind the interface panels.

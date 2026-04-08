@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+
+const SAVED_CITIES_KEY = "weather-app.saved-cities";
 
 //components, will be put into own files later on
 function SearchInput({
@@ -47,6 +49,30 @@ function SearchButton({ onSearchButtonClick, isLoading }) {
   );
 }
 
+function SavedCities({ savedCities, onSelectCity }) {
+  if (savedCities.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="saved-cities" aria-label="Saved cities">
+      <div className="saved-cities-label">Saved cities</div>
+      <div className="saved-cities-list">
+        {savedCities.map((city) => (
+          <button
+            key={city}
+            type="button"
+            className="saved-city-chip"
+            onClick={() => onSelectCity(city)}
+          >
+            {city}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function App() {
   // React state management
   const [cityEntered, setCity] = useState("");
@@ -55,6 +81,29 @@ function App() {
   const [weatherData, setWeatherData] = useState(null);
   //loading weather data
   const [isLoading, setIsLoading] = useState(false);
+  const [savedCities, setSavedCities] = useState([]);
+
+  useEffect(() => {
+    const storedCities = window.localStorage.getItem(SAVED_CITIES_KEY);
+
+    if (!storedCities) {
+      return;
+    }
+
+    try {
+      const parsedCities = JSON.parse(storedCities);
+
+      if (Array.isArray(parsedCities)) {
+        setSavedCities(parsedCities);
+      }
+    } catch (error) {
+      console.log("Could not parse saved cities", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(SAVED_CITIES_KEY, JSON.stringify(savedCities));
+  }, [savedCities]);
 
   //event handler for input box
   function onSearchChange(event) {
@@ -78,13 +127,36 @@ function App() {
     searchWeather();
   }
 
+  function onSavedCityClick(city) {
+    setCity(city);
+    searchWeather(city);
+  }
+
+  function saveCity(cityName) {
+    setSavedCities((currentCities) => {
+      const normalizedCity = cityName.trim();
+
+      if (normalizedCity.length === 0) {
+        return currentCities;
+      }
+
+      const filteredCities = currentCities.filter(
+        (savedCity) => savedCity.toLowerCase() !== normalizedCity.toLowerCase(),
+      );
+
+      return [normalizedCity, ...filteredCities].slice(0, 5);
+    });
+  }
+
   //async - this function will deal with something that takes time
   //does not block other api calls on page, when it finishes, come back here and continue
-  async function searchWeather() {
+  async function searchWeather(searchTerm = cityEntered) {
+    const trimmedCity = searchTerm.trim();
+
     //clear old errors
     setSearchError("");
     //if no City has been entered, display error message
-    if (cityEntered.trim().length === 0) {
+    if (trimmedCity.length === 0) {
       setSearchError("Please enter a city!");
       return;
     }
@@ -94,7 +166,7 @@ function App() {
 
     try {
       const geoResponse = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/search?name=${cityEntered}&count=1&language=en&format=json`,
+        `https://geocoding-api.open-meteo.com/v1/search?name=${trimmedCity}&count=1&language=en&format=json`,
       );
 
       const geoData = await geoResponse.json();
@@ -109,6 +181,7 @@ function App() {
       const latitude = geoData.results[0].latitude;
       const longitude = geoData.results[0].longitude;
       const cityName = geoData.results[0].name;
+      saveCity(cityName);
 
       const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`,
@@ -426,6 +499,10 @@ function App() {
             onSearchButtonClick={onSearchClick}
             isLoading={isLoading}
           ></SearchButton>
+          <SavedCities
+            savedCities={savedCities}
+            onSelectCity={onSavedCityClick}
+          ></SavedCities>
           {weatherBlock}
         </div>
       </section>

@@ -118,6 +118,36 @@ button:disabled {
   background-color: #475569;
 }
 
+.saved-cities {
+  margin-top: 18px;
+}
+
+.saved-cities-label {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #bfdbfe;
+}
+
+.saved-cities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.saved-city-chip {
+  border: 1px solid rgba(191, 219, 254, 0.35);
+  background: rgba(30, 41, 59, 0.78);
+  color: #e2e8f0;
+}
+
+.saved-city-chip:hover {
+  background: rgba(59, 130, 246, 0.35);
+}
+
 .incorrectValue {
   color: #f87171;
 }

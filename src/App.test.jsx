@@ -5,6 +5,7 @@ import App from "./App";
 
 afterEach(() => {
   vi.restoreAllMocks();
+  window.localStorage.clear();
 });
 
 describe("App", () => {
@@ -258,5 +259,88 @@ describe("App", () => {
     expect(screen.getByRole("heading", { name: /daily weather app/i }).closest(
       ".app-shell",
     )).toHaveClass("theme-rain");
+  });
+
+  it("saves a searched city for quick reuse", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "Tokyo", latitude: 35.6762, longitude: 139.6503 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [0],
+            temperature_2m_max: [24],
+            temperature_2m_min: [17],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "Tokyo");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(screen.getByRole("button", { name: "Tokyo" })).toBeInTheDocument();
+    expect(JSON.parse(window.localStorage.getItem("weather-app.saved-cities"))).toEqual([
+      "Tokyo",
+    ]);
+  });
+
+  it("searches again when a saved city chip is clicked", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    window.localStorage.setItem(
+      "weather-app.saved-cities",
+      JSON.stringify(["Berlin"]),
+    );
+
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "Berlin", latitude: 52.52, longitude: 13.405 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [3],
+            temperature_2m_max: [15],
+            temperature_2m_min: [8],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Berlin" }));
+
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+    expect(screen.getByText(/weather for berlin/i)).toBeInTheDocument();
   });
 });

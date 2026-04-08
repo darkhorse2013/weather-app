@@ -53,7 +53,7 @@ function SearchButton({ onSearchButtonClick, isLoading }) {
   );
 }
 
-function SavedCities({ savedCities, onSelectCity, onRemoveCity }) {
+function SavedCities({ savedCities, activeCity, onSelectCity, onRemoveCity }) {
   if (savedCities.length === 0) {
     return null;
   }
@@ -63,7 +63,14 @@ function SavedCities({ savedCities, onSelectCity, onRemoveCity }) {
       <div className="saved-cities-label">Saved cities</div>
       <div className="saved-cities-list">
         {savedCities.map((city) => (
-          <div key={city} className="saved-city-chip">
+          <div
+            key={city}
+            className={
+              activeCity?.toLowerCase() === city.toLowerCase()
+                ? "saved-city-chip saved-city-chip-active"
+                : "saved-city-chip"
+            }
+          >
             <button
               type="button"
               className="saved-city-button"
@@ -316,6 +323,7 @@ function App() {
   //loading weather data
   const [isLoading, setIsLoading] = useState(false);
   const [savedCities, setSavedCities] = useState([]);
+  const [activeSavedCity, setActiveSavedCity] = useState("");
 
   useEffect(() => {
     const storedCities = window.localStorage.getItem(SAVED_CITIES_KEY);
@@ -363,6 +371,7 @@ function App() {
 
   function onSavedCityClick(city) {
     setCity(city);
+    setActiveSavedCity(city);
     searchWeather(city);
   }
 
@@ -374,15 +383,23 @@ function App() {
         return currentCities;
       }
 
-      const filteredCities = currentCities.filter(
-        (savedCity) => savedCity.toLowerCase() !== normalizedCity.toLowerCase(),
+      const alreadySaved = currentCities.some(
+        (savedCity) => savedCity.toLowerCase() === normalizedCity.toLowerCase(),
       );
 
-      return [normalizedCity, ...filteredCities].slice(0, 5);
+      if (alreadySaved) {
+        return currentCities;
+      }
+
+      return [normalizedCity, ...currentCities].slice(0, 5);
     });
   }
 
   function removeSavedCity(cityName) {
+    if (activeSavedCity.toLowerCase() === cityName.toLowerCase()) {
+      setActiveSavedCity("");
+    }
+
     setSavedCities((currentCities) =>
       currentCities.filter(
         (savedCity) => savedCity.toLowerCase() !== cityName.toLowerCase(),
@@ -425,6 +442,7 @@ function App() {
       const cityName = geoData.results[0].name;
       const locationLabel = formatLocationLabel(geoData.results[0]);
       saveCity(cityName);
+      setActiveSavedCity(cityName);
 
       const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`,
@@ -809,6 +827,7 @@ function App() {
           ></SearchButton>
           <SavedCities
             savedCities={savedCities}
+            activeCity={activeSavedCity}
             onSelectCity={onSavedCityClick}
             onRemoveCity={removeSavedCity}
           ></SavedCities>

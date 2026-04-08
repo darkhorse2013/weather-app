@@ -360,6 +360,61 @@ describe("App", () => {
     expect(screen.getByText(/weather for berlin, de/i)).toBeInTheDocument();
   });
 
+  it("keeps saved city order stable and highlights the selected chip", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    window.localStorage.setItem(
+      "weather-app.saved-cities",
+      JSON.stringify(["London", "Luton"]),
+    );
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [
+            {
+              name: "Luton",
+              country: "United Kingdom",
+              country_code: "GB",
+              latitude: 51.8787,
+              longitude: -0.420,
+            },
+          ],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [3],
+            temperature_2m_max: [15],
+            temperature_2m_min: [8],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Luton" }));
+
+    expect(JSON.parse(window.localStorage.getItem("weather-app.saved-cities"))).toEqual([
+      "London",
+      "Luton",
+    ]);
+    expect(screen.getByRole("button", { name: "Luton" }).closest(".saved-city-chip")).toHaveClass(
+      "saved-city-chip-active",
+    );
+  });
+
   it("clears the search input after a successful search", async () => {
     const user = userEvent.setup();
     const today = new Date();

@@ -151,6 +151,12 @@ button:disabled {
   background: rgba(59, 130, 246, 0.35);
 }
 
+.saved-city-chip-active {
+  border-color: rgba(147, 197, 253, 0.8);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.52), rgba(96, 165, 250, 0.3));
+  box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.18), 0 10px 22px rgba(37, 99, 235, 0.22);
+}
+
 .saved-city-button,
 .saved-city-remove {
   padding: 0;

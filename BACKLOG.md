@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-040` Added CNC HUD textures and ambient red overlay details behind the interface panels.
 - `WX-039` Added a CNC title plate, status strip, and tactical section framing around the main weather panels.
 - `WX-038` Reshaped the CNC panels, search controls, and chips with sharper angular frames and stronger red panel styling.
 - `WX-037` Reduced the CNC title sizing and spacing so the app heading stays compact on narrower cards.

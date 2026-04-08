@@ -206,12 +206,41 @@ button:disabled {
 }
 
 .theme-cnc {
+  position: relative;
+  overflow: hidden;
   background:
     linear-gradient(180deg, rgba(25, 8, 8, 0.98), rgba(6, 6, 8, 0.98)),
     radial-gradient(circle at top, rgba(220, 38, 38, 0.2), transparent 28%);
   box-shadow:
     0 20px 52px rgba(0, 0, 0, 0.55),
     inset 0 0 0 1px rgba(127, 29, 29, 0.32);
+}
+
+.theme-cnc::before,
+.theme-cnc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.theme-cnc::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 16px),
+    radial-gradient(circle at 10% 12%, rgba(239, 68, 68, 0.38) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 14% 16%, rgba(239, 68, 68, 0.28) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 88% 8%, rgba(239, 68, 68, 0.38) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 92% 12%, rgba(239, 68, 68, 0.28) 0 1px, transparent 1.5px);
+  opacity: 0.28;
+}
+
+.theme-cnc::after {
+  background:
+    radial-gradient(circle at top left, rgba(239, 68, 68, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(239, 68, 68, 0.14), transparent 26%),
+    linear-gradient(90deg, transparent 0, rgba(239, 68, 68, 0.1) 12%, transparent 24%),
+    linear-gradient(90deg, transparent 76%, rgba(239, 68, 68, 0.1) 88%, transparent 100%);
+  mix-blend-mode: screen;
 }
 
 .theme-cnc h1 {
@@ -225,6 +254,8 @@ button:disabled {
 }
 
 .theme-cnc .app-title-panel {
+  position: relative;
+  z-index: 1;
   margin-bottom: 20px;
   padding: 16px 22px 14px;
 }
@@ -259,6 +290,7 @@ button:disabled {
 .theme-cnc .saved-cities-label,
 .theme-cnc .weather-title {
   position: relative;
+  z-index: 1;
   display: inline-block;
   padding-top: 10px;
 }
@@ -355,6 +387,7 @@ button:disabled {
 
 .theme-cnc .saved-city-chip,
 .theme-cnc .saved-city-chip-active {
+  position: relative;
   border-color: rgba(248, 113, 113, 0.45);
   border-radius: 0;
   clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
@@ -385,6 +418,7 @@ button:disabled {
 }
 
 .theme-cnc .cnc-section-frame {
+  z-index: 1;
   padding-top: 30px;
 }
 

@@ -247,6 +247,42 @@ button:disabled {
   mix-blend-mode: screen;
 }
 
+.theme-cnc .app-shell::before {
+  content: "";
+  position: absolute;
+  inset: 150px 8% 60px;
+  background:
+    radial-gradient(circle at 30% 35%, rgba(248, 113, 113, 0.08), transparent 18%),
+    radial-gradient(circle at 68% 42%, rgba(248, 113, 113, 0.06), transparent 20%),
+    linear-gradient(90deg, transparent 12%, rgba(248, 113, 113, 0.04) 36%, transparent 62%),
+    linear-gradient(180deg, transparent 18%, rgba(248, 113, 113, 0.03) 48%, transparent 82%);
+  opacity: 0.65;
+  clip-path: polygon(10% 18%, 22% 8%, 36% 12%, 48% 22%, 62% 18%, 78% 24%, 88% 38%, 84% 54%, 70% 66%, 58% 70%, 42% 66%, 28% 72%, 16% 62%, 10% 46%);
+  filter: blur(0.5px);
+  pointer-events: none;
+}
+
+.theme-cnc .app-shell::after {
+  content: "";
+  position: absolute;
+  top: 22px;
+  right: 26px;
+  width: 110px;
+  height: 72px;
+  background-image:
+    radial-gradient(circle at 10px 10px, rgba(248, 113, 113, 0.6) 0 1.5px, transparent 1.7px),
+    radial-gradient(circle at 30px 10px, rgba(248, 113, 113, 0.6) 0 1.5px, transparent 1.7px),
+    radial-gradient(circle at 50px 10px, rgba(248, 113, 113, 0.6) 0 1.5px, transparent 1.7px),
+    radial-gradient(circle at 20px 24px, rgba(248, 113, 113, 0.45) 0 1.5px, transparent 1.7px),
+    radial-gradient(circle at 40px 24px, rgba(248, 113, 113, 0.45) 0 1.5px, transparent 1.7px),
+    radial-gradient(circle at 60px 24px, rgba(248, 113, 113, 0.45) 0 1.5px, transparent 1.7px),
+    radial-gradient(circle at 10px 38px, rgba(248, 113, 113, 0.3) 0 1.5px, transparent 1.7px),
+    radial-gradient(circle at 30px 38px, rgba(248, 113, 113, 0.3) 0 1.5px, transparent 1.7px),
+    radial-gradient(circle at 50px 38px, rgba(248, 113, 113, 0.3) 0 1.5px, transparent 1.7px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 .theme-cnc h1 {
   font-family: var(--cnc-display-font);
   color: #fee2e2;

@@ -83,8 +83,8 @@ describe("App", () => {
     expect(screen.getByText("Today", { selector: ".today-card-date" })).toHaveClass(
       "today-card-date",
     );
-    expect(screen.getByText("Date: Tomorrow")).toHaveClass(
-      "weatherDate",
+    expect(screen.getByText("Tomorrow", { selector: ".forecast-card-date" })).toHaveClass(
+      "forecast-card-date",
     );
   });
 
@@ -131,8 +131,8 @@ describe("App", () => {
     await user.type(screen.getByRole("textbox"), "London");
     await user.click(screen.getByRole("button", { name: /search/i }));
 
-    expect(screen.getByText(`Date: ${weekdayLabel}`)).toHaveClass(
-      "weatherDate",
+    expect(screen.getByText(weekdayLabel, { selector: ".forecast-card-date" })).toHaveClass(
+      "forecast-card-date",
     );
   });
 
@@ -184,8 +184,12 @@ describe("App", () => {
       screen.getByText("Today", { selector: ".today-card-date" }),
     ).toBeInTheDocument();
     expect(screen.getByText(/high 18/i)).toBeInTheDocument();
-    expect(screen.getByText("Date: Tomorrow")).toBeInTheDocument();
-    expect(screen.getByText(`Date: ${nextDayLabel}`)).toBeInTheDocument();
+    expect(
+      screen.getByText("Tomorrow", { selector: ".forecast-card-date" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(nextDayLabel, { selector: ".forecast-card-date" }),
+    ).toBeInTheDocument();
   });
 
   it("applies a sunny theme when today's forecast is clear", async () => {

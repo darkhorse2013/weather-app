@@ -518,8 +518,9 @@ button:disabled {
 .weather-card {
   background: #1e293b;
   border-radius: 12px;
-  padding: 15px;
+  padding: 22px 18px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  text-align: center;
 }
 
 .weather-card-hidden {
@@ -549,6 +550,43 @@ button:disabled {
 
 .weather-line {
   margin: 6px 0;
+}
+
+.forecast-card-icon-row {
+  margin-bottom: 10px;
+}
+
+.forecast-card-icon {
+  font-size: 42px;
+}
+
+.forecast-card-kicker {
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bfdbfe;
+}
+
+.forecast-card-date {
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.forecast-card-condition {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #dbeafe;
+}
+
+.forecast-card-range {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #e2e8f0;
 }
 
 @media (max-width: 768px) {

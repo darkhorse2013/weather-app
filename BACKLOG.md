@@ -21,6 +21,7 @@ This file keeps a simple running log of what we want to build, what we are activ
 
 ## Done
 
+- `WX-027` Updated the smaller forecast cards to match the visual hierarchy of the hero card more closely.
 - `WX-026` Slowed the weekly temperature trend animation so the chart motion reads more clearly.
 - `WX-025` Cleared the search input back to the placeholder after a successful search.
 - `WX-024` Animated the weekly temperature trend when it enters view.

@@ -281,26 +281,25 @@ function ForecastCard({ dailyWeather }) {
           : "weather-card weather-card-hidden"
       }
     >
-      <div className="weather-line">
-        <span className="weatherIcon">{dailyWeather.weatherIcon}</span>
+      <div className="forecast-card-icon-row">
+        <span className="weatherIcon forecast-card-icon">{dailyWeather.weatherIcon}</span>
       </div>
 
-      <div className="weather-line">
-        <span
-          className={
-            dailyWeather.isTodaysDate ? "highlightDate" : "weatherDate"
-          }
-        >
-          Date: {dailyWeather.displayDate}
-        </span>
+      <div className="forecast-card-kicker">Next Up</div>
+      <div
+        className={
+          dailyWeather.isTodaysDate
+            ? "forecast-card-date highlightDate"
+            : "forecast-card-date"
+        }
+      >
+        {dailyWeather.displayDate}
       </div>
-      <div className="weather-line">
-        Max: {dailyWeather.temperature_max}{"\u00B0C"}
+      <div className="forecast-card-condition">{dailyWeather.condition}</div>
+      <div className="forecast-card-range">
+        High {dailyWeather.temperature_max}{"\u00B0C"} / Low{" "}
+        {dailyWeather.temperature_min}{"\u00B0C"}
       </div>
-      <div className="weather-line">
-        Min: {dailyWeather.temperature_min}{"\u00B0C"}
-      </div>
-      <div className="weather-line">{dailyWeather.condition}</div>
     </div>
   );
 }

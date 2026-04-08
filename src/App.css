@@ -14,6 +14,63 @@ body {
   padding: 0 20px;
 }
 
+.app-shell {
+  width: 100%;
+  max-width: 1240px;
+  padding: 28px 24px 40px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 35%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.78));
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.35);
+  transition:
+    background 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.theme-default {
+  background:
+    radial-gradient(circle at top, rgba(125, 211, 252, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.88));
+}
+
+.theme-sunny {
+  background:
+    radial-gradient(circle at top, rgba(253, 224, 71, 0.28), transparent 32%),
+    linear-gradient(180deg, rgba(251, 191, 36, 0.28), rgba(14, 116, 144, 0.9));
+}
+
+.theme-cloudy {
+  background:
+    radial-gradient(circle at top, rgba(226, 232, 240, 0.18), transparent 32%),
+    linear-gradient(180deg, rgba(100, 116, 139, 0.85), rgba(30, 41, 59, 0.95));
+}
+
+.theme-fog {
+  background:
+    radial-gradient(circle at top, rgba(226, 232, 240, 0.22), transparent 36%),
+    linear-gradient(180deg, rgba(148, 163, 184, 0.82), rgba(51, 65, 85, 0.96));
+}
+
+.theme-rain {
+  background:
+    radial-gradient(circle at top, rgba(56, 189, 248, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(30, 64, 175, 0.82), rgba(15, 23, 42, 0.96));
+}
+
+.theme-snow {
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.26), transparent 34%),
+    linear-gradient(180deg, rgba(191, 219, 254, 0.55), rgba(51, 65, 85, 0.92));
+}
+
+.theme-storm {
+  background:
+    radial-gradient(circle at top, rgba(167, 139, 250, 0.24), transparent 32%),
+    linear-gradient(180deg, rgba(49, 46, 129, 0.88), rgba(15, 23, 42, 0.98));
+}
+
 h1,
 p {
   color: #e2e8f0;
@@ -91,6 +148,34 @@ button:disabled {
   text-align: left;
 }
 
+.theme-default .today-card {
+  background: linear-gradient(135deg, #1d4ed8, #0f172a 70%);
+}
+
+.theme-sunny .today-card {
+  background: linear-gradient(135deg, #f59e0b, #0f766e 72%);
+}
+
+.theme-cloudy .today-card {
+  background: linear-gradient(135deg, #64748b, #1e293b 72%);
+}
+
+.theme-fog .today-card {
+  background: linear-gradient(135deg, #94a3b8, #334155 72%);
+}
+
+.theme-rain .today-card {
+  background: linear-gradient(135deg, #0284c7, #1e3a8a 72%);
+}
+
+.theme-snow .today-card {
+  background: linear-gradient(135deg, #cbd5e1, #475569 72%);
+}
+
+.theme-storm .today-card {
+  background: linear-gradient(135deg, #7c3aed, #1e1b4b 72%);
+}
+
 .today-card-copy {
   display: flex;
   flex-direction: column;
@@ -141,11 +226,27 @@ button:disabled {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
+.theme-sunny .weather-card {
+  background: rgba(12, 74, 110, 0.82);
+}
+
+.theme-cloudy .weather-card,
+.theme-fog .weather-card,
+.theme-rain .weather-card,
+.theme-snow .weather-card,
+.theme-storm .weather-card {
+  background: rgba(30, 41, 59, 0.82);
+}
+
 .weather-line {
   margin: 6px 0;
 }
 
 @media (max-width: 768px) {
+  .app-shell {
+    padding: 20px 16px 32px;
+  }
+
   .today-card {
     flex-direction: column;
     text-align: center;

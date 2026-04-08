@@ -181,4 +181,82 @@ describe("App", () => {
     expect(screen.getByText("Date: Tomorrow")).toBeInTheDocument();
     expect(screen.getByText(`Date: ${nextDayLabel}`)).toBeInTheDocument();
   });
+
+  it("applies a sunny theme when today's forecast is clear", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "Lisbon", latitude: 38.7223, longitude: -9.1393 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [0],
+            temperature_2m_max: [22],
+            temperature_2m_min: [14],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "Lisbon");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(screen.getByRole("heading", { name: /daily weather app/i }).closest(
+      ".app-shell",
+    )).toHaveClass("theme-sunny");
+  });
+
+  it("applies a rain theme when today's forecast is rainy", async () => {
+    const user = userEvent.setup();
+    const today = new Date();
+
+    const formatDate = (value) => {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce({
+        json: async () => ({
+          results: [{ name: "Cardiff", latitude: 51.4816, longitude: -3.1791 }],
+        }),
+      })
+      .mockResolvedValueOnce({
+        json: async () => ({
+          daily: {
+            time: [formatDate(today)],
+            weathercode: [61],
+            temperature_2m_max: [13],
+            temperature_2m_min: [8],
+          },
+        }),
+      });
+
+    render(<App />);
+
+    await user.type(screen.getByRole("textbox"), "Cardiff");
+    await user.click(screen.getByRole("button", { name: /search/i }));
+
+    expect(screen.getByRole("heading", { name: /daily weather app/i }).closest(
+      ".app-shell",
+    )).toHaveClass("theme-rain");
+  });
 });

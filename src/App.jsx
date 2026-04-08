@@ -312,7 +312,35 @@ function App() {
     return parsedDate.toLocaleDateString("en-GB", { weekday: "long" });
   }
 
+  function getThemeName(condition) {
+    let conditionText = condition.toLowerCase();
+
+    if (conditionText.includes("thunderstorm")) return "storm";
+    if (
+      conditionText.includes("snow") ||
+      conditionText.includes("hail") ||
+      conditionText.includes("freezing")
+    ) {
+      return "snow";
+    }
+    if (
+      conditionText.includes("rain") ||
+      conditionText.includes("drizzle") ||
+      conditionText.includes("shower")
+    ) {
+      return "rain";
+    }
+    if (conditionText.includes("fog")) return "fog";
+    if (conditionText.includes("clear")) return "sunny";
+    if (conditionText.includes("cloud") || conditionText.includes("overcast")) {
+      return "cloudy";
+    }
+
+    return "default";
+  }
+
   let weatherBlock;
+  let appThemeClass = "app-shell theme-default";
   if (isLoading) {
     weatherBlock = <div>Loading weather data...</div>;
   } else if (weatherData) {
@@ -322,6 +350,9 @@ function App() {
     const upcomingWeather = weatherData.filter(
       (dailyWeather) => dailyWeather.date !== featuredWeather.date,
     );
+    const forecastTheme = getThemeName(featuredWeather.condition);
+
+    appThemeClass = `app-shell theme-${forecastTheme}`;
 
     weatherBlock = (
       <div className="weather-container">
@@ -379,7 +410,7 @@ function App() {
 
   return (
     <>
-      <section id="center">
+      <section id="center" className={appThemeClass}>
         <div>
           <h1>Daily weather app</h1>
           <p>Welcome to the daily weather app!</p>
